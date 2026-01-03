@@ -1,6 +1,6 @@
 namespace i8080_emulator.Decoding;
 using Executing.Computing;
-using Signals;
+using Signaling;
 
 public struct Decoded()
 {    

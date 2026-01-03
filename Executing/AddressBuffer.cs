@@ -1,5 +1,5 @@
 namespace i8080_emulator.Executing;
-using Signals;
+using Signaling;
 
 public partial class DataPath
 {

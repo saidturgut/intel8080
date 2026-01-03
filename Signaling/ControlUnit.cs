@@ -1,4 +1,4 @@
-namespace i8080_emulator.Signals;
+namespace i8080_emulator.Signaling;
 
 public class ControlUnit : SignalSets
 {

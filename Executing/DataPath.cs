@@ -1,6 +1,6 @@
 namespace i8080_emulator.Executing;
 using Computing;
-using Signals;
+using Signaling;
 
 public partial class DataPath
 {

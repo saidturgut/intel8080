@@ -1,5 +1,5 @@
 namespace i8080_emulator.Executing.Computing;
-using Signals;
+using Signaling;
 
 public class ALUOperator
 {

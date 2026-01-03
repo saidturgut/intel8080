@@ -1,4 +1,4 @@
-namespace i8080_emulator.Signals;
+namespace i8080_emulator.Signaling;
 using Decoding;
 
 public class SignalSets

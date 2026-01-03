@@ -1,5 +1,5 @@
 namespace i8080_emulator.Decoding;
-using Signals;
+using Signaling;
 
 public class DecoderRegisters
 {

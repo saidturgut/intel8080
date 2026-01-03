@@ -1,4 +1,4 @@
-using i8080_emulator.Signals;
+using i8080_emulator.Signaling;
 
 namespace i8080_emulator.Decoding;
 

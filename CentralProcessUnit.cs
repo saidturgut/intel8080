@@ -1,6 +1,6 @@
 namespace i8080_emulator;
 using Executing;
-using Signals;
+using Signaling;
 
 public class CentralProcessUnit
 {    
