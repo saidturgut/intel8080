@@ -1,3 +1,5 @@
+using i8080_emulator.Executing.Computing;
+
 namespace i8080_emulator.Decoding;
 using Signaling;
 
@@ -65,8 +67,9 @@ public class DecoderFamilies : DecoderModel
         decoded.Table.Add(MachineCycle.ALU_EXECUTE);
 
         byte bb_xxx_bbb = BB_XXX_BBB(opcode);
-        decoded.AluOperation.Operation = ALUOperations[bb_xxx_bbb];
-        decoded.AluOperation.CarryIn = bb_xxx_bbb == 1;
+        decoded.AluOperation.Operation = ALUTable.ElementAt(bb_xxx_bbb).Value;
+        decoded.AluOperation.Opcode = ALUTable.ElementAt(bb_xxx_bbb).Key;
+        decoded.AluOperation.UseCarry = bb_xxx_bbb % 2 != 0 && ALUTable.ElementAt(bb_xxx_bbb).Key != ALUOpcode.CMP;
         
         return decoded;
     }

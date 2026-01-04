@@ -20,16 +20,16 @@ public class DecoderModel
             { 0x3F, MachineCycle.CMC },
         };
 
-    protected readonly Operation[] ALUOperations =
+    protected readonly Dictionary<ALUOpcode, Operation> ALUTable = new()
     {
-        Operation.ADD, // ADD
-        Operation.ADD, // ADC
-        Operation.SUB, // SUB
-        Operation.SBB, // SBB
-        Operation.AND, // ANA
-        Operation.XOR, // XRA
-        Operation.OR, // ORA
-        Operation.SUB, // CMP
+        { ALUOpcode.ADD, Operation.ADD },// 000
+        { ALUOpcode.ADC, Operation.ADD },// 001
+        { ALUOpcode.SUB, Operation.SUB },// 010
+        { ALUOpcode.SBB, Operation.SUB },// 011
+        { ALUOpcode.ANA, Operation.AND },// 100
+        { ALUOpcode.XRA, Operation.XOR },// 101
+        { ALUOpcode.ORA, Operation.OR },// 110
+        { ALUOpcode.CMP, Operation.SUB },// 111
     };
     
     protected readonly DataDriver[] DataDrivers =

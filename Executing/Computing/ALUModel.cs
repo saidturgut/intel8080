@@ -30,16 +30,18 @@ public enum ALUFlags
 public struct ALUOperation()
 {
     public Operation Operation = Operation.NONE;
-    public bool CarryIn = false;
+    public ALUOpcode Opcode = ALUOpcode.NONE;
+    public bool UseCarry = false;
 }
 
 public enum Operation
 {
     NONE,
-    ADD, SUB, SBB, AND, XOR, OR,  CMP, INR, DCR
+    ADD, SUB, AND, XOR, OR
 }
 
 public enum ALUOpcode
 {
+    NONE,
     ADD, ADC, SUB, SBB, ANA, XRA, ORA, CMP,
 }

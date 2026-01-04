@@ -9,11 +9,6 @@ public class RAM
     
     private readonly byte[] ROM =
     {
-        0x3E, 0xFF,   // A=FF
-        0x06, 0x00,   // B=00
-        0x37,         // CY=1
-        0x88,         // A=00 CY=1
-        0x88,         //          //,
         0x76,
     };
     

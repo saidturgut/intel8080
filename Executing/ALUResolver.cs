@@ -14,11 +14,10 @@ public partial class DataPath
             ALUOperation = signals.AluOperation,
             A = A,
             B = TMP,
-            CR = (byte)(FLAGS & (byte)ALUFlags.Carry) == 1 && 
-                 signals.AluOperation.CarryIn,
+            CR = (byte)(FLAGS & (byte)ALUFlags.Carry) == 1,
         });
 
-        if (signals.SideEffect != SideEffect.CMP)
+        if (signals.AluOperation.Opcode != ALUOpcode.CMP)
             A = Output.Result;
 
         FLAGS = Output.Flags;

@@ -10,7 +10,7 @@ public class ALU
         {
             case Operation.ADD:
             {
-                byte carry = (byte)(input.CR ? 1 : 0);
+                byte carry = (byte)(input is { CR: true, ALUOperation.UseCarry: true } ? 1 : 0);
                 int result = input.A + input.B + carry;
                 
                 if (((byte)result & 0x80) != 0) output.Flags |= (byte)ALUFlags.Sign;
@@ -21,6 +21,35 @@ public class ALU
                 if (EvenParity((byte)result)) output.Flags |= (byte)ALUFlags.Parity;
                 //1111
                 if (result > 0xFF) output.Flags |= (byte)ALUFlags.Carry;
+
+                output.Result = (byte)result;
+                
+                break;
+            }
+            
+            case Operation.SUB:
+            {
+                byte carry = 0;
+
+                if (input.ALUOperation.UseCarry)
+                {
+                    carry = (byte)(input.CR ? 0 : 1);
+                }
+                else
+                {
+                    carry = 1;
+                }
+                
+                int result = input.A + (~input.B & 0xFF) + carry;
+                
+                if (((byte)result & 0x80) != 0) output.Flags |= (byte)ALUFlags.Sign;
+                if ((byte)result == 0) output.Flags |= (byte)ALUFlags.Zero;
+                //0000
+                if ((input.A & 0x0F) - (input.B & 0x0F) - (1 - carry) < 0) output.Flags |= (byte)ALUFlags.AuxCarry;
+                //0000
+                if (EvenParity((byte)result)) output.Flags |= (byte)ALUFlags.Parity;
+                //1111
+                if (result < 0x100) output.Flags |= (byte)ALUFlags.Carry;
 
                 output.Result = (byte)result;
                 
