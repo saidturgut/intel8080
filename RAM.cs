@@ -8,9 +8,9 @@ public class RAM
     private readonly byte[] Memory = new byte[0x10000]; // 64 KB
     
     private readonly byte[] ROM =
-    {
-        0x76,
-    };
+    [
+        0x76
+    ];
     
     public void Init()
     {

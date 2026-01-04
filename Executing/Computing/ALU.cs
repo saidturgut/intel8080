@@ -5,67 +5,65 @@ public class ALU
     public ALUOutput Compute(ALUInput input)
     {
         ALUOutput output = new ALUOutput();
+        int result = 0;
         
         switch (input.ALUOperation.Operation)
         {
             case Operation.ADD:
             {
                 byte carry = (byte)(input is { CR: true, ALUOperation.UseCarry: true } ? 1 : 0);
-                int result = input.A + input.B + carry;
+                result = input.A + input.B + carry;
                 
-                if (((byte)result & 0x80) != 0) output.Flags |= (byte)ALUFlags.Sign;
-                if ((byte)result == 0) output.Flags |= (byte)ALUFlags.Zero;
-                //0000
                 if (((input.A & 0x0F) + (input.B & 0x0F) + carry) > 0x0F) output.Flags |= (byte)ALUFlags.AuxCarry;
-                //0000
-                if (EvenParity((byte)result)) output.Flags |= (byte)ALUFlags.Parity;
-                //1111
                 if (result > 0xFF) output.Flags |= (byte)ALUFlags.Carry;
-
-                output.Result = (byte)result;
-                
                 break;
             }
-            
             case Operation.SUB:
             {
-                byte carry = 0;
-
+                byte carry;
                 if (input.ALUOperation.UseCarry)
-                {
                     carry = (byte)(input.CR ? 0 : 1);
-                }
                 else
-                {
                     carry = 1;
-                }
                 
-                int result = input.A + (~input.B & 0xFF) + carry;
+                result = input.A + (~input.B & 0xFF) + carry;
                 
-                if (((byte)result & 0x80) != 0) output.Flags |= (byte)ALUFlags.Sign;
-                if ((byte)result == 0) output.Flags |= (byte)ALUFlags.Zero;
-                //0000
                 if ((input.A & 0x0F) - (input.B & 0x0F) - (1 - carry) < 0) output.Flags |= (byte)ALUFlags.AuxCarry;
-                //0000
-                if (EvenParity((byte)result)) output.Flags |= (byte)ALUFlags.Parity;
-                //1111
                 if (result < 0x100) output.Flags |= (byte)ALUFlags.Carry;
-
-                output.Result = (byte)result;
+                break;
+            }
+            case Operation.AND:
+            {
+                result = input.A & input.B;
                 
+                output.Flags |= (byte)ALUFlags.AuxCarry;
+                break;
+            }
+            case Operation.XOR:
+            {
+                result = input.A ^ input.B;
+                break;
+            }
+            case Operation.OR:
+            {
+                result = input.A | input.B;
                 break;
             }
         }
-
+        if ((result & 0x80) != 0) output.Flags |= (byte)ALUFlags.Sign;
+        if (result == 0) output.Flags |= (byte)ALUFlags.Zero;
+        if (EvenParity((byte)result)) output.Flags |= (byte)ALUFlags.Parity;
+        
+        output.Result = (byte)result;
         return output;
     }
-
-    private bool EvenParity(byte input)
+    
+    private bool EvenParity(byte result)
     {
         int ones = 0;
         for (int i = 0; i < 8; i++)
         {
-            ones += (input >> i) & 1;
+            ones += (result >> i) & 1;
         }
 
         return (ones & 1) == 0;
