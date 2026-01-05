@@ -4,8 +4,8 @@ using Signaling;
 
 public class CPU
 {    
-    private readonly DataPath DataPath = new DataPath();
-    private readonly ControlUnit ControlUnit = new ControlUnit();
+    private readonly DataPath DataPath = new ();
+    private readonly ControlUnit ControlUnit = new ();
     
     public void PowerOn() => Clock();
     

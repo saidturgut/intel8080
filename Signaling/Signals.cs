@@ -43,7 +43,12 @@ public enum SideEffect
     NONE,
     DECODE,
     PC_INC,
-    CMP,
-    STC,
-    CMC,
+    
+    SP_INC, SP_DCR,
+    
+    BC_INC, BC_DCR,
+    DE_INC, DE_DCR,
+    HL_INC, HL_DCR,
+    
+    STC, CMC,
 }

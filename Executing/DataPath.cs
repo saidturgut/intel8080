@@ -5,12 +5,12 @@ using Signaling;
 // ALU RESOLVER, ADDRESS BUFFER, MULTIPLEXER, INCREMENTER
 public partial class DataPath
 {
-    private readonly RAM RAM = new RAM();
-    private readonly ALU ALU = new ALU();
+    private readonly RAM RAM = new ();
+    private readonly ALU ALU = new ();
     
-    private readonly Bus DBUS = new Bus(); // DATA BUS 
-    private readonly Bus ABUS_H = new Bus(); 
-    private readonly Bus ABUS_L = new Bus(); 
+    private readonly Bus DBUS = new (); // DATA BUS 
+    private readonly Bus ABUS_H = new (); 
+    private readonly Bus ABUS_L = new (); 
     
     private byte PC_H, PC_L; // PROGRAM COUNTER
     private byte SP_H, SP_L; // STACK POINTER
@@ -25,10 +25,13 @@ public partial class DataPath
 
     private byte FLAGS = 0x2;
     
-    private SignalSet signals = new SignalSet();
+    private SignalSet signals = new ();
     
     public void Init()
     {
+        D = 0x12;
+        E = 0x34;
+        
         RAM.Init();
     }
     
@@ -56,6 +59,7 @@ public partial class DataPath
         Console.WriteLine($"L : {L}");
         Console.WriteLine($"A : {A}");
         Console.WriteLine($"HL : {(ushort)((H << 8) + L)}");
+        Console.WriteLine($"SP : {(ushort)((SP_H << 8) + SP_L)}");
         Console.WriteLine(
             $"FLAGS : S={(FLAGS >> 7) & 1} Z={(FLAGS >> 6) & 1} AC={(FLAGS >> 4) & 1} P={(FLAGS >> 2) & 1} CY={(FLAGS >> 0) & 1}");
     }

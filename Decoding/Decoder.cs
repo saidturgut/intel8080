@@ -1,26 +1,30 @@
 namespace i8080_emulator.Decoding;
 
-public class DecoderCore : DecoderMultiplexer
+public class Decoder : DecoderMultiplexer
 {
     public Decoded Decode(byte opcode)
     {
         // CHECK FIXED OPCODES
         if (FixedOpcodes.TryGetValue(opcode, out var value))
-            return Family11(value);
+            return FamilyFXD(value);
         
         // CHECK INSTRUCTION FAMILY
         switch ((opcode & 0b1100_0000) >> 6)
         {
             case 0b00:
-                if (BB_BBB_XXX(opcode) != 4 && BB_BBB_XXX(opcode) != 5)
+                if (BB_BBB_XXX(opcode) == 0b100 || BB_BBB_XXX(opcode) == 0b101)
+                    return FamilyALU(opcode, false);
+
+                if (BB_BBB_XXX(opcode) == 0b011)
                 {
-                    return Family00(opcode);
+                    return INX_DCX(opcode);
                 }
-                return Family10(opcode, false);
+                
+                return Family00(opcode);
             case 0b01:
-                return Family01(opcode);
+                return FamilyMOV(opcode);
             case 0b10:
-                return Family10(opcode, true);
+                return FamilyALU(opcode, true);
             case 0b11:
                 throw new Exception("INVALID OPCODE");
         }
@@ -28,5 +32,3 @@ public class DecoderCore : DecoderMultiplexer
         return new Decoded();
     }
 }
-
-// 00_110_111

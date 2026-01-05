@@ -15,6 +15,7 @@ public partial class ControlUnit
             
             { MachineCycle.STC, STC },
             { MachineCycle.CMC, CMC },
+            { MachineCycle.INX_DCX, INX_DCX },
         };
     private static readonly Dictionary<MachineCycle, byte> MachineCyclesLength
         = new()
@@ -29,6 +30,7 @@ public partial class ControlUnit
             
             { MachineCycle.STC, 1 },
             { MachineCycle.CMC, 1 },
+            { MachineCycle.INX_DCX, 1 },
         };
 }
 
@@ -44,4 +46,5 @@ public enum MachineCycle
     NONE, JMP, CALL, LDA, STA, LHLD, SHLD, //FIXED INSTRUCTIONS
     
     STC, CMC,
+    INX_DCX,
 }

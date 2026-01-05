@@ -3,8 +3,8 @@ using Decoding;
 
 public partial class ControlUnit
 {        
-    private readonly DecoderCore Decoder = new DecoderCore();
-    private readonly Sequencer Sequencer = new Sequencer();
+    private readonly Decoder Decoder = new ();
+    private readonly Sequencer Sequencer = new ();
     
     private MachineCycle currentCycle;
     

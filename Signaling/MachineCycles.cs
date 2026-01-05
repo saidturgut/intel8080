@@ -5,7 +5,7 @@ using Decoding;
 
 public partial class ControlUnit
 {
-    private static Decoded decoded = new Decoded();
+    private static Decoded decoded = new ();
     
     private static SignalSet FETCH(byte tState) => tState switch
     {

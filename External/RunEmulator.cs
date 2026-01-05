@@ -2,8 +2,7 @@
 
 internal static class RunEmulator
 {
-    private static readonly CPU 
-        Cpu = new CPU();
+    private static readonly CPU Cpu = new ();
 
     private static void Main() => Cpu.PowerOn();
 }

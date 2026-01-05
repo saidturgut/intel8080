@@ -68,6 +68,18 @@ public class DecoderModel
         DataLatcher.RAM,
         DataLatcher.A,
     };
+
+    protected readonly SideEffect[] RegisterPairs =
+    {
+        SideEffect.BC_INC, // 00
+        SideEffect.DE_INC, // 01
+        SideEffect.HL_INC, // 10
+        SideEffect.SP_INC, // 11
+        SideEffect.BC_DCR, // 00 + 4
+        SideEffect.DE_DCR, // 01 + 4
+        SideEffect.HL_DCR, // 10 + 4
+        SideEffect.SP_DCR, // 11 + 4
+    };
     
     protected byte BB_XXX_BBB(byte opcode)
     {
