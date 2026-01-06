@@ -16,14 +16,12 @@ public class Decoder : DecoderMultiplexer
                 switch (BB_BBB_XXX(opcode))
                 {
                     case 0b100:
-                        
                     case 0b101: return FamilyALU(opcode, false);
-                    
                     case 0b011: return INX_DCX(opcode);
-                    
+                    case 0b010: return LDAX_STAX(opcode);
                     case 0b001:
                     {
-                        if((opcode & 0b00_001_000) >> 3 == 1)
+                        if(BB_BBX_BBB(opcode) == 1)
                             return DAD(opcode);
                         else
                             return LXI(opcode);

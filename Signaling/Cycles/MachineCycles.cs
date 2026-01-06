@@ -15,7 +15,7 @@ public partial class ControlUnitROM
 
     private static SignalSet RAM_READ() => new ()
     {
-        AddressDriver = Register.HL_L,
+        AddressDriver = decoded.AddressDriver,
         DataDriver = Register.RAM,
         DataLatcher = Register.TMP,
     };
@@ -30,7 +30,7 @@ public partial class ControlUnitROM
 
     private static SignalSet RAM_WRITE() => new ()
     {
-        AddressDriver = Register.HL_L,
+        AddressDriver = decoded.AddressDriver,
         DataDriver = Register.TMP,
         DataLatcher = Register.RAM,
     };

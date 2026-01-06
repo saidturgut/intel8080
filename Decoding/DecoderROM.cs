@@ -89,6 +89,14 @@ public class DecoderModel
         return (byte)(opcode & 0b00_000_111);
     }
     
+    protected byte BB_BBX_BBB(byte opcode)
+    {
+        return (byte)((opcode & 0b00_001_000) >> 3);
+    }
+    
     protected int GetRegisterPair(byte opcode) =>
         (((opcode & 0x30) >> 4) + ((opcode & 0x8) >> 3) * 4);
+    
+    protected int GetRegisterPairNormal(byte opcode) => 
+        (opcode & 0x30) >> 4;
 }

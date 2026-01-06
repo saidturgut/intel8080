@@ -10,6 +10,7 @@ public partial class DecoderMultiplexer
     {
         Decoded decoded = new Decoded
         {            
+            AddressDriver = Register.HL_L,
             DataDriver = EncodedRegisters[BB_BBB_XXX(opcode)],
             DataLatcher = EncodedRegisters[BB_XXX_BBB(opcode)],
         };

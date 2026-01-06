@@ -5,7 +5,8 @@ using Executing;
 using Signaling;
 
 public struct Decoded()
-{    
+{
+    public Register AddressDriver = Register.NONE;
     public Register DataDriver = Register.NONE;// CMD B, X
     public Register DataLatcher = Register.NONE; // CMD X, B
     public SideEffect SideEffect = SideEffect.NONE;

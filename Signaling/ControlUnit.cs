@@ -26,8 +26,6 @@ public class ControlUnit : ControlUnitROM
 
     public void Advance()
     {
-        Console.WriteLine(currentCycle);
-        
         Sequencer.Advance((byte)(decoded.Cycles.Count - 1));
         currentCycle = decoded.Cycles[Sequencer.mState];
     }

@@ -29,6 +29,7 @@ public partial class DecoderMultiplexer
 
     private Decoded ALU(byte opcode) => new()
     {
+        AddressDriver = Register.HL_L,
         DataDriver = EncodedRegisters[BB_BBB_XXX(opcode)], // OPERAND
         DataLatcher = Register.A, // DESTINATION
         AluOperation = new ALUOperation
@@ -42,7 +43,8 @@ public partial class DecoderMultiplexer
     };
 
     private Decoded INR_DCR(byte opcode) => new()
-    {
+    {        
+        AddressDriver = Register.HL_L,
         DataDriver = EncodedRegisters[BB_XXX_BBB(opcode)], // OPERAND AND DESTINATION 
         DataLatcher = EncodedRegisters[BB_XXX_BBB(opcode)], // IS SAME
         AluOperation = new ALUOperation
