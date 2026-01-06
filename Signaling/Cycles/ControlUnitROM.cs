@@ -1,7 +1,7 @@
 namespace i8080_emulator.Signaling.Cycles;
 using Decoding;
 
-public partial class ControlUnitModel
+public partial class ControlUnitROM
 {
     protected static Decoded decoded = new ();
     

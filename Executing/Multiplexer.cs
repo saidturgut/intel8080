@@ -3,13 +3,15 @@ using Signaling;
 
 public partial class DataPath
 {
+    public byte GetIR() => Registers[Register.IR].Get();
+    
     public void MultiplexerDrive()
     {        
-        if(signals.DataDriver == DataDriver.NONE)
+        if(signals.DataDriver == Register.NONE)
             return;
         
         // RANDOM ACCESS MEMORY
-        if (signals.DataDriver == DataDriver.RAM)
+        if (signals.DataDriver == Register.RAM)
         {
             RAM.Read(ABUS_H, ABUS_L, DBUS);
             return;
@@ -23,11 +25,11 @@ public partial class DataPath
     
     public void MultiplexerLatch()
     {        
-        if(signals.DataLatcher == DataLatcher.NONE)
+        if(signals.DataLatcher == Register.NONE)
             return;
         
         // RANDOM ACCESS MEMORY
-        if (signals.DataLatcher == DataLatcher.RAM)
+        if (signals.DataLatcher == Register.RAM)
         {
             RAM.Write(ABUS_H, ABUS_L, DBUS);
             return;
@@ -36,8 +38,6 @@ public partial class DataPath
         if (DataLatchers.ContainsKey(signals.DataLatcher))
         {
             DataLatchers[signals.DataLatcher].Set(DBUS.Get());
-            
-            Console.WriteLine(signals.DataLatcher);
         }
     }
 }

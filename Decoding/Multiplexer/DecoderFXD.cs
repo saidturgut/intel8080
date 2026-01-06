@@ -8,7 +8,7 @@ public partial class DecoderMultiplexer
         Decoded decoded = new Decoded();
 
         if (machineCycle != MachineCycle.NONE) 
-            decoded.Table.Add(machineCycle);
+            decoded.Cycles.Add(machineCycle);
         
         return decoded;
     }

@@ -42,35 +42,29 @@ public class DecoderModel
         { ALUOpcode.DCR, Operation.SUB }, // 101
     };
 
+    protected readonly Register[] EncodedRegisters =
+    {
+        Register.B, // 000
+        Register.C, // 001
+        Register.D, // 010
+        Register.E, // 011
+        Register.HL_H, // 100
+        Register.HL_L, // 101
+        Register.RAM, // 110
+        Register.A, // 111
+    };
+
     protected readonly ALUOpcode[] CarryUsers =
     [
         ALUOpcode.ADC, ALUOpcode.SBB,
     ];
     
-    protected readonly DataDriver[] DataDrivers =
-    [
-        DataDriver.B, DataDriver.C,
-        DataDriver.D, DataDriver.E,
-        DataDriver.H, DataDriver.L,
-        DataDriver.RAM,
-        DataDriver.A
-    ];
-    
-    protected readonly DataLatcher[] DataLatchers =
-    [
-        DataLatcher.B, DataLatcher.C,
-        DataLatcher.D, DataLatcher.E,
-        DataLatcher.H, DataLatcher.L,
-        DataLatcher.RAM,
-        DataLatcher.A
-    ];
-
-    protected readonly DataLatcher[][] RegisterPairs =
+    protected readonly Register[][] RegisterPairs =
     {
-        [DataLatcher.C, DataLatcher.B],
-        [DataLatcher.E, DataLatcher.D],
-        [DataLatcher.L, DataLatcher.H],
-        [DataLatcher.SP_L, DataLatcher.SP_H],
+        [Register.C, Register.B],
+        [Register.E, Register.D],
+        [Register.HL_L, Register.HL_H],
+        [Register.SP_L, Register.SP_H],
     };
 
     protected readonly SideEffect[] IncrementOpcodes =

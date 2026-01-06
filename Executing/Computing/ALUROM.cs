@@ -1,21 +1,23 @@
 namespace i8080_emulator.Executing.Computing;
 using Signaling;
 
-public static class ALUModel
+public static class ALUROM
 {
     public static readonly ALUFlags[] FlagMasks =
     [
         ALUFlags.Sign | ALUFlags.Zero | ALUFlags.AuxCarry | ALUFlags.Parity | ALUFlags.Carry, // ALL
         ALUFlags.Sign | ALUFlags.Zero | ALUFlags.AuxCarry | ALUFlags.Parity, // NO CARRY
+        ALUFlags.Carry, // ONLY CARRY
     ];
 }
 
-public readonly struct ALUInput(ALUOperation aluOperation, byte a, byte b, bool cr)
+public readonly struct ALUInput(Operation operation, byte a, byte b, bool flagCy, bool carryUser)
 {
-    public readonly ALUOperation ALUOperation = aluOperation;
+    public readonly Operation Operation = operation;
     public readonly byte A = a;
     public readonly byte B = b;
-    public readonly bool CR = cr;
+    public readonly bool FlagCY = flagCy;
+    public readonly bool CarryUser = carryUser;
 }
 
 public struct ALUOutput()
@@ -41,8 +43,8 @@ public struct ALUOperation()
 {
     public Operation Operation = Operation.NONE;
     public ALUOpcode Opcode = ALUOpcode.NONE;
-    public DataLatcher A = 0;
-    public DataDriver B = 0;
+    public Register A = 0;
+    public Register B = 0;
     public bool UseCarry = false;
     public byte FlagMask = 0;
 }
@@ -50,12 +52,13 @@ public struct ALUOperation()
 public enum Operation
 {
     NONE,
-    ADD, SUB, AND, XOR, OR
+    ADD, SUB, AND, XOR, OR,
 }
 
 public enum ALUOpcode
 {
     NONE,
     ADD, ADC, SUB, SBB, ANA, XRA, ORA, CMP,
-    INR, DCR, INX, DCX
+    INR, DCR, INX, DCX,
+    DAD,
 }

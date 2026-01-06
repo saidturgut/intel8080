@@ -3,7 +3,7 @@ using Computing;
 using Signaling;
 
 // ALU RESOLVER, ADDRESS BUFFER, MULTIPLEXER, INCREMENTER
-public partial class DataPath : DataPathModel
+public partial class DataPath : DataPathROM
 {
     private readonly RAM RAM = new ();
     private readonly ALU ALU = new ();
@@ -44,18 +44,18 @@ public partial class DataPath : DataPathModel
 
     public void Debug()
     {
-        Console.WriteLine($"PROGRAM COUNTER : {(ushort)((Registers[R.PC_H].Get() << 8) + Registers[R.PC_L].Get())}");
-        Console.WriteLine($"IR : {Registers[R.IR].Get()}");
-        Console.WriteLine($"TMP : {Registers[R.TMP].Get()}");
-        Console.WriteLine($"B : {Registers[R.B].Get()}");
-        Console.WriteLine($"C : {Registers[R.C].Get()}");
-        Console.WriteLine($"D : {Registers[R.D].Get()}");
-        Console.WriteLine($"E : {Registers[R.E].Get()}");
-        Console.WriteLine($"H : {Registers[R.H].Get()}");
-        Console.WriteLine($"L : {Registers[R.L].Get()}");
-        Console.WriteLine($"A : {Registers[R.A].Get()}");
-        Console.WriteLine($"HL : {(ushort)((Registers[R.H].Get() << 8) + Registers[R.L].Get())}");
-        Console.WriteLine($"SP : {(ushort)((Registers[R.SP_H].Get() << 8) + Registers[R.SP_L].Get())}");
+        Console.WriteLine($"PROGRAM COUNTER : {(ushort)((Registers[Register.PC_H].Get() << 8) + Registers[Register.PC_L].Get())}");
+        Console.WriteLine($"IR : {Registers[Register.IR].Get()}");
+        Console.WriteLine($"TMP : {Registers[Register.TMP].Get()}");
+        Console.WriteLine($"B : {Registers[Register.B].Get()}");
+        Console.WriteLine($"C : {Registers[Register.C].Get()}");
+        Console.WriteLine($"D : {Registers[Register.D].Get()}");
+        Console.WriteLine($"E : {Registers[Register.E].Get()}");
+        Console.WriteLine($"H : {Registers[Register.HL_H].Get()}");
+        Console.WriteLine($"L : {Registers[Register.HL_L].Get()}");
+        Console.WriteLine($"A : {Registers[Register.A].Get()}");
+        Console.WriteLine($"HL : {(ushort)((Registers[Register.HL_H].Get() << 8) + Registers[Register.HL_L].Get())}");
+        Console.WriteLine($"SP : {(ushort)((Registers[Register.SP_H].Get() << 8) + Registers[Register.SP_L].Get())}");
         Console.WriteLine(
             $"FLAGS : S={(FLAGS >> 7) & 1} Z={(FLAGS >> 6) & 1} AC={(FLAGS >> 4) & 1} P={(FLAGS >> 2) & 1} CY={(FLAGS >> 0) & 1}");
     }

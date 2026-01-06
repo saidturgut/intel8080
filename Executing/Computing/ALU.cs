@@ -7,11 +7,11 @@ public class ALU
         ALUOutput output = new ALUOutput();
         int result = 0;
         
-        switch (input.ALUOperation.Operation)
+        switch (input.Operation)
         {
             case Operation.ADD:
             {
-                byte carry = (byte)(input is { CR: true, ALUOperation.UseCarry: true } ? 1 : 0);
+                byte carry = (byte)(input is { FlagCY: true, CarryUser: true } ? 1 : 0);
                 result = input.A + input.B + carry;
                 
                 if (((input.A & 0x0F) + (input.B & 0x0F) + carry) > 0x0F) output.Flags |= (byte)ALUFlags.AuxCarry;
@@ -21,8 +21,8 @@ public class ALU
             case Operation.SUB:
             {
                 byte carry;
-                if (input.ALUOperation.UseCarry)
-                    carry = (byte)(input.CR ? 0 : 1);
+                if (input.CarryUser)
+                    carry = (byte)(input.FlagCY ? 0 : 1);
                 else
                     carry = 1;
                 

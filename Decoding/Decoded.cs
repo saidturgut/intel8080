@@ -6,13 +6,13 @@ using Signaling;
 
 public struct Decoded()
 {    
-    public DataLatcher DataLatcher = DataLatcher.NONE;// CMD X, B
-    public DataDriver DataDriver = DataDriver.NONE;// CMD B, X
+    public Register DataDriver = Register.NONE;// CMD B, X
+    public Register DataLatcher = Register.NONE; // CMD X, B
     public SideEffect SideEffect = SideEffect.NONE;
 
-    public DataLatcher[] RegisterPair = [];
+    public Register[] RegisterPairs = [];
     
     public ALUOperation? AluOperation = null;
     
-    public readonly List<MachineCycle> Table = [MachineCycle.FETCH];
+    public readonly List<MachineCycle> Cycles = [MachineCycle.FETCH];
 }

@@ -16,8 +16,6 @@ public class CPU
         while (!ControlUnit.HALT)
         {
             Tick();
-            
-            Thread.Sleep(300);
         }
         
         DataPath.MemoryDump();
@@ -40,7 +38,7 @@ public class CPU
         DataPath.Debug();
         
         ControlUnit.Decode(
-        DataPath.Registers[R.IR].Get());
+        DataPath.GetIR());
         ControlUnit.Advance();
     }
 }

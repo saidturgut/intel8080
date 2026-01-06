@@ -4,14 +4,14 @@ using Executing;
 
 public struct SignalSet()
 {
-    public AddressDriver AddressDriver = AddressDriver.NONE;
-    public DataDriver DataDriver = DataDriver.NONE;
-    public DataLatcher DataLatcher = DataLatcher.NONE;
+    public Register AddressDriver = Register.NONE;
+    public Register DataDriver = Register.NONE;
+    public Register DataLatcher = Register.NONE;
     public ALUOperation? AluOperation = null;
     public SideEffect SideEffect = SideEffect.NONE;
 }
 
-public enum AddressDriver
+/*public enum AddressDriver
 {
     NONE,
     PC, SP,
@@ -38,7 +38,7 @@ public enum DataLatcher
     TMP,
     IR,
     SP_H, SP_L
-}
+}*/
 
 public enum SideEffect
 {

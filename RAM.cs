@@ -9,8 +9,12 @@ public class RAM
     
     private readonly byte[] ROM =
     [
-        0x01, 0xAA, 0x55,
-        0x76
+        0x3E, 0xFF, // MVI A,FF
+        0x87,       // ADD A   (CY=1)
+        0x21, 0x00, 0x00, // LXI H,0000
+        0x01, 0x00, 0x00, // LXI B,0000
+        0x09,             // DAD B  (CY=0!)
+        0x76              // HLT
     ];
     
     public void Init()

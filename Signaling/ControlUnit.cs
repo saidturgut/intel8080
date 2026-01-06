@@ -2,7 +2,7 @@ namespace i8080_emulator.Signaling;
 using Decoding;
 using Cycles;
 
-public class ControlUnit : ControlUnitModel
+public class ControlUnit : ControlUnitROM
 {        
     private readonly Decoder Decoder = new ();
     private readonly Sequencer Sequencer = new ();
@@ -26,7 +26,9 @@ public class ControlUnit : ControlUnitModel
 
     public void Advance()
     {
-        Sequencer.Advance((byte)(decoded.Table.Count - 1));
-        currentCycle = decoded.Table[Sequencer.mState];
+        Console.WriteLine(currentCycle);
+        
+        Sequencer.Advance((byte)(decoded.Cycles.Count - 1));
+        currentCycle = decoded.Cycles[Sequencer.mState];
     }
 }

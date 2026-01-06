@@ -1,6 +1,8 @@
 namespace i8080_emulator.Signaling.Cycles;
+using Executing.Computing;
+using Executing;
 
-public partial class ControlUnitModel
+public partial class ControlUnitROM
 {
     private static SignalSet STC() => new () { SideEffect = SideEffect.STC };
     private static SignalSet CMC() => new () { SideEffect = SideEffect.CMC };
@@ -8,17 +10,17 @@ public partial class ControlUnitModel
     
     private static SignalSet LXI_LOW() => new ()
     {
-        AddressDriver = AddressDriver.PC,
-        DataDriver = DataDriver.RAM,
-        DataLatcher = decoded.RegisterPair[0],
+        AddressDriver = Register.PC_L,
+        DataDriver = Register.RAM,
+        DataLatcher = decoded.RegisterPairs[0],
         SideEffect = SideEffect.PC_INC,
     };
     
     private static SignalSet LXI_HIGH() => new ()
     {
-        AddressDriver = AddressDriver.PC,
-        DataDriver = DataDriver.RAM,
-        DataLatcher = decoded.RegisterPair[1],
+        AddressDriver = Register.PC_L,
+        DataDriver = Register.RAM,
+        DataLatcher = decoded.RegisterPairs[1],
         SideEffect = SideEffect.PC_INC,
     };
 }

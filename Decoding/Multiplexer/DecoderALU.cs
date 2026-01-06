@@ -1,6 +1,7 @@
 namespace i8080_emulator.Decoding.Multiplexer;
 using Executing.Computing;
 using Signaling.Cycles;
+using Executing;
 using Signaling;
 
 public partial class DecoderMultiplexer
@@ -10,61 +11,64 @@ public partial class DecoderMultiplexer
     {
         Decoded decoded = isNative ? ALU(opcode) : INR_DCR(opcode);
 
-        decoded.Table.Add(decoded.DataDriver == DataDriver.RAM ? 
+        decoded.Cycles.Add(decoded.DataDriver == Register.RAM ? 
             MachineCycle.RAM_READ : 
             MachineCycle.TMP_LATCH);
-
-        decoded.Table.Add(MachineCycle.ALU_EXECUTE);
+        decoded.Cycles.Add(MachineCycle.ALU_EXECUTE);
 
         var nullable = decoded.AluOperation!.Value;
         
         nullable.UseCarry = CarryUsers.Contains(nullable.Opcode);
 
         if (nullable.Opcode == ALUOpcode.CMP)
-            decoded.DataLatcher = DataLatcher.NONE;
-        
+            decoded.DataLatcher = Register.NONE;
+
+        decoded.AluOperation = nullable;
         return decoded;
     }
 
-    private Decoded ALU(byte opcode)
+    private Decoded ALU(byte opcode) => new()
     {
-        Decoded decoded = new Decoded
+        DataDriver = EncodedRegisters[BB_BBB_XXX(opcode)], // OPERAND
+        DataLatcher = Register.A, // DESTINATION
+        AluOperation = new ALUOperation
         {
-            DataDriver = DataDrivers[BB_BBB_XXX(opcode)],// OPERAND
-            DataLatcher = DataLatcher.A, // DESTINATION
-            AluOperation = new ALUOperation(),
-        };
-        var nullable = new ALUOperation();
-        
-        byte bb_xxx_bbb = BB_XXX_BBB(opcode);
-        nullable.Operation = ALU_10.ElementAt(bb_xxx_bbb).Value;
-        nullable.Opcode = ALU_10.ElementAt(bb_xxx_bbb).Key;
-        nullable.A = DataLatcher.A; // DESTINATION
-        nullable.B = DataDriver.TMP; // OPERAND GOES TO TMP
-        nullable.FlagMask = 0;
-        
-        decoded.AluOperation = nullable;
-        return decoded;
-    }
+            Operation = ALU_10.ElementAt(BB_XXX_BBB(opcode)).Value,
+            Opcode = ALU_10.ElementAt(BB_XXX_BBB(opcode)).Key,
+            A = Register.A, // DESTINATION
+            B = Register.TMP, // OPERAND GOES TO TMP
+            FlagMask = 0,
+        }
+    };
 
-    private Decoded INR_DCR(byte opcode)
+    private Decoded INR_DCR(byte opcode) => new()
     {
-        Decoded decoded = new Decoded
-        {            
-            DataDriver = DataDrivers[BB_XXX_BBB(opcode)], // OPERAND AND DESTINATION 
-            DataLatcher = DataLatchers[BB_XXX_BBB(opcode)],  // IS SAME
-            AluOperation = new ALUOperation(),
-        };
-        var nullable = new ALUOperation();
-        
-        byte bb_bbb_xxx = (byte)(BB_BBB_XXX(opcode) - 4);
-        nullable.Operation = ALU_00.ElementAt(bb_bbb_xxx).Value;
-        nullable.Opcode = ALU_00.ElementAt(bb_bbb_xxx).Key;
-        nullable.A = DataLatcher.TMP; // DESTINATION, IT GOES TO REGISTER ON T2
-        nullable.B = DataDriver.NONE; // IT'S GONNA BE 1
-        nullable.FlagMask = 1;
+        DataDriver = EncodedRegisters[BB_XXX_BBB(opcode)], // OPERAND AND DESTINATION 
+        DataLatcher = EncodedRegisters[BB_XXX_BBB(opcode)], // IS SAME
+        AluOperation = new ALUOperation
+        {
+            Operation = ALU_00.ElementAt((byte)(BB_BBB_XXX(opcode) - 4)).Value,
+            Opcode = ALU_00.ElementAt((byte)(BB_BBB_XXX(opcode) - 4)).Key,
+            A = Register.TMP, // DESTINATION, IT GOES TO REGISTER
+            B = Register.NONE, // IT'S GONNA BE 1
+            FlagMask = 1,
+        }
+    };
 
-        decoded.AluOperation = nullable;
+    protected Decoded DAD(byte opcode)
+    {
+        Decoded decoded = new()
+        {
+            AluOperation = new ALUOperation
+            {
+                Operation = Operation.ADD,
+                Opcode = ALUOpcode.DAD,
+                A = RegisterPairs[GetRegisterPair(opcode) - 4][0],
+                B = RegisterPairs[GetRegisterPair(opcode) - 4][1],
+                FlagMask = 2
+            }
+        };
+        decoded.Cycles.Add(MachineCycle.ALU_EXECUTE);
         return decoded;
     }
 }
