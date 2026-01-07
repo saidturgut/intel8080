@@ -8,19 +8,18 @@ public partial class ControlUnitROM
     private static SignalSet CMC() => new () { SideEffect = SideEffect.CMC };
     private static SignalSet INX_DCX() => new () { SideEffect = decoded.SideEffect };
     
-    private static SignalSet LXI_LOW() => new ()
-    {
-        AddressDriver = Register.PC_L,
-        DataDriver = Register.RAM,
-        DataLatcher = decoded.RegisterPairs[0],
-        SideEffect = SideEffect.PC_INC,
-    };
     
-    private static SignalSet LXI_HIGH() => new ()
+    // *** LHLD / SHLD READ / WRITE AND EXECUTE *** //
+    private static SignalSet RAM_READ_H() => new ()
     {
-        AddressDriver = Register.PC_L,
+        AddressDriver = decoded.AddressDriver,
         DataDriver = Register.RAM,
-        DataLatcher = decoded.RegisterPairs[1],
-        SideEffect = SideEffect.PC_INC,
+        DataLatcher = Register.HL_H,
+    };
+    private static SignalSet RAM_WRITE_H() => new ()
+    {
+        AddressDriver = decoded.AddressDriver,
+        DataDriver = Register.HL_H,
+        DataLatcher = Register.RAM,
     };
 }

@@ -12,7 +12,7 @@ public partial class DecoderMultiplexer
         Decoded decoded = isNative ? ALU(opcode) : INR_DCR(opcode);
 
         decoded.Cycles.Add(decoded.DataDriver == Register.RAM ? 
-            MachineCycle.RAM_READ : 
+            MachineCycle.RAM_READ_TMP : 
             MachineCycle.TMP_LATCH);
         decoded.Cycles.Add(MachineCycle.ALU_EXECUTE);
 
@@ -65,8 +65,8 @@ public partial class DecoderMultiplexer
             {
                 Operation = Operation.ADD,
                 Opcode = ALUOpcode.DAD,
-                A = RegisterPairs[GetRegisterPair(opcode) - 4][0],
-                B = RegisterPairs[GetRegisterPair(opcode) - 4][1],
+                A = EncodedRegisterPairs[GetRegisterPair(opcode) - 4][0],
+                B = EncodedRegisterPairs[GetRegisterPair(opcode) - 4][1],
                 FlagMask = 2
             }
         };

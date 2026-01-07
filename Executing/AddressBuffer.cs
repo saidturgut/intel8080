@@ -7,35 +7,11 @@ public partial class DataPath
     {
         if(signals.AddressDriver == Register.NONE)
             return;
-        
-        // PROGRAM COUNTER
-        if (signals.AddressDriver == Register.PC_L)
+
+        if (RegisterPairs.TryGetValue(signals.AddressDriver, out var registerPair))
         {
-            ABUS_L.Set(Registers[Register.PC_L].Get());
-            ABUS_H.Set(Registers[Register.PC_H].Get());
-            return;
-        }
-        
-        if (signals.AddressDriver == Register.C)
-        {
-            ABUS_L.Set(Registers[Register.C].Get());
-            ABUS_H.Set(Registers[Register.B].Get());
-            return;
-        }
-        
-        if (signals.AddressDriver == Register.E)
-        {
-            ABUS_L.Set(Registers[Register.E].Get());
-            ABUS_H.Set(Registers[Register.D].Get());
-            return;
-        }
-        
-        // TEMP ADDRESS REGISTER
-        if (signals.AddressDriver == Register.HL_L)
-        {
-            ABUS_L.Set(Registers[Register.HL_L].Get());
-            ABUS_H.Set(Registers[Register.HL_H].Get());
-            return;
+            ABUS_L.Set(registerPair[0].Get());
+            ABUS_H.Set(registerPair[1].Get());
         }
     }
 }

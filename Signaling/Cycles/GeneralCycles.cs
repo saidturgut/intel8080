@@ -1,7 +1,6 @@
-using i8080_emulator.Executing;
-
 namespace i8080_emulator.Signaling.Cycles;
 using Executing.Computing;
+using Executing;
 
 public partial class ControlUnitROM
 {
@@ -12,29 +11,7 @@ public partial class ControlUnitROM
         DataLatcher = Register.IR,
         SideEffect = SideEffect.PC_INC,
     };
-
-    private static SignalSet RAM_READ() => new ()
-    {
-        AddressDriver = decoded.AddressDriver,
-        DataDriver = Register.RAM,
-        DataLatcher = Register.TMP,
-    };
-
-    private static SignalSet RAM_READ_IMM() => new ()
-    {
-        AddressDriver = Register.PC_L,
-        DataDriver = Register.RAM,
-        DataLatcher = Register.TMP,
-        SideEffect = SideEffect.PC_INC,
-    };
-
-    private static SignalSet RAM_WRITE() => new ()
-    {
-        AddressDriver = decoded.AddressDriver,
-        DataDriver = Register.TMP,
-        DataLatcher = Register.RAM,
-    };
-
+    
     private static SignalSet INTERNAL_LATCH() => new ()
     {
         DataDriver = decoded.DataDriver,

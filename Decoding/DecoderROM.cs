@@ -6,23 +6,17 @@ using Signaling;
 
 public class DecoderModel
 {
-    protected readonly Dictionary<byte, MachineCycle> FixedOpcodes
+    protected static readonly Dictionary<byte, MachineCycle> FixedOpcodes
         = new ()
         {
-            { 0x00, MachineCycle.NONE }, // NOP
-            { 0x76, MachineCycle.NONE }, // HLT
-            { 0xC3, MachineCycle.JMP },
-            { 0xCD, MachineCycle.CALL },
-            { 0x3A, MachineCycle.LDA },
-            { 0x32, MachineCycle.STA },
-            { 0x2A, MachineCycle.LHLD },
-            { 0x22, MachineCycle.SHLD },
+            { 0x00, MachineCycle.EMPTY }, // NOP
+            { 0x76, MachineCycle.EMPTY }, // HLT
             
             { 0x37, MachineCycle.STC },
             { 0x3F, MachineCycle.CMC },
         };
 
-    protected readonly Dictionary<ALUOpcode, Operation> ALU_10 = new()
+    protected static readonly Dictionary<ALUOpcode, Operation> ALU_10 = new()
     {
         // 10 FAMILY
         { ALUOpcode.ADD, Operation.ADD }, // 000
@@ -35,14 +29,14 @@ public class DecoderModel
         { ALUOpcode.CMP, Operation.SUB }, // 111
     };
     
-    protected readonly Dictionary<ALUOpcode, Operation> ALU_00 = new()
+    protected static readonly Dictionary<ALUOpcode, Operation> ALU_00 = new()
     {
         // 00 FAMILY
         { ALUOpcode.INR, Operation.ADD }, // 100
         { ALUOpcode.DCR, Operation.SUB }, // 101
     };
 
-    protected readonly Register[] EncodedRegisters =
+    protected static readonly Register[] EncodedRegisters =
     {
         Register.B, // 000
         Register.C, // 001
@@ -54,12 +48,12 @@ public class DecoderModel
         Register.A, // 111
     };
 
-    protected readonly ALUOpcode[] CarryUsers =
+    protected static readonly ALUOpcode[] CarryUsers =
     [
         ALUOpcode.ADC, ALUOpcode.SBB,
     ];
     
-    protected readonly Register[][] RegisterPairs =
+    protected static readonly Register[][] EncodedRegisterPairs =
     {
         [Register.C, Register.B],
         [Register.E, Register.D],
@@ -67,7 +61,7 @@ public class DecoderModel
         [Register.SP_L, Register.SP_H],
     };
 
-    protected readonly SideEffect[] IncrementOpcodes =
+    protected static readonly SideEffect[] IncrementOpcodes =
     {
         SideEffect.BC_INC, // 00
         SideEffect.DE_INC, // 01
@@ -79,24 +73,29 @@ public class DecoderModel
         SideEffect.SP_DCR, // 11 + 4
     };
     
-    protected byte BB_XXX_BBB(byte opcode)
+    protected static byte BB_XXX_BBB(byte opcode)
     {
         return (byte)((opcode & 0b00_111_000) >> 3);
     }
 
-    protected byte BB_BBB_XXX(byte opcode)
+    protected static byte BB_BBB_XXX(byte opcode)
     {
         return (byte)(opcode & 0b00_000_111);
     }
     
-    protected byte BB_BBX_BBB(byte opcode)
+    protected static byte BB_BBX_BBB(byte opcode)
     {
         return (byte)((opcode & 0b00_001_000) >> 3);
     }
     
-    protected int GetRegisterPair(byte opcode) =>
+    protected static byte BB_XXB_BBB(byte opcode)
+    {
+        return (byte)((opcode & 0b00_110_000) >> 4);
+    }
+    
+    protected static int GetRegisterPair(byte opcode) =>
         (((opcode & 0x30) >> 4) + ((opcode & 0x8) >> 3) * 4);
     
-    protected int GetRegisterPairNormal(byte opcode) => 
+    protected static int GetRegisterPairNormal(byte opcode) => 
         (opcode & 0x30) >> 4;
 }

@@ -11,35 +11,6 @@ public struct SignalSet()
     public SideEffect SideEffect = SideEffect.NONE;
 }
 
-/*public enum AddressDriver
-{
-    NONE,
-    PC, SP,
-    HL,
-}
-
-public enum DataDriver
-{
-    NONE,
-    B, C, D, E,
-    H, L,
-    RAM,
-    A,
-    TMP,
-}
-
-public enum DataLatcher
-{
-    NONE,
-    B, C, D, E,
-    H, L,
-    RAM,
-    A,
-    TMP,
-    IR,
-    SP_H, SP_L
-}*/
-
 public enum SideEffect
 {
     NONE,
@@ -50,6 +21,8 @@ public enum SideEffect
     BC_INC, BC_DCR,
     DE_INC, DE_DCR,
     HL_INC, HL_DCR,
+    
+    WZ_INC,
     
     STC, CMC,
 }

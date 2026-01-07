@@ -18,7 +18,15 @@ public class Decoder : DecoderMultiplexer
                     case 0b100:
                     case 0b101: return FamilyALU(opcode, false);
                     case 0b011: return INX_DCX(opcode);
-                    case 0b010: return LDAX_STAX(opcode);
+                    case 0b010:
+                    {
+                        switch (BB_XXB_BBB(opcode))
+                        {
+                            case 0b11: return LDA_STA(opcode, false);
+                            case 0b10: return LHLD_SHLD(opcode);
+                            default: return LDA_STA(opcode, true);
+                        }
+                    }
                     case 0b001:
                     {
                         if(BB_BBX_BBB(opcode) == 1)

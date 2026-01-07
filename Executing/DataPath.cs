@@ -56,6 +56,7 @@ public partial class DataPath : DataPathROM
         Console.WriteLine($"A : {Registers[Register.A].Get()}");
         Console.WriteLine($"HL : {(ushort)((Registers[Register.HL_H].Get() << 8) + Registers[Register.HL_L].Get())}");
         Console.WriteLine($"SP : {(ushort)((Registers[Register.SP_H].Get() << 8) + Registers[Register.SP_L].Get())}");
+        Console.WriteLine($"WZ : {(ushort)((Registers[Register.WZ_H].Get() << 8) + Registers[Register.WZ_L].Get())}");
         Console.WriteLine(
             $"FLAGS : S={(FLAGS >> 7) & 1} Z={(FLAGS >> 6) & 1} AC={(FLAGS >> 4) & 1} P={(FLAGS >> 2) & 1} CY={(FLAGS >> 0) & 1}");
     }

@@ -17,15 +17,13 @@ public partial class DecoderMultiplexer
 
         if (decoded.DataLatcher == Register.RAM)
         {
-            decoded.Cycles.Add(MachineCycle.TMP_LATCH);
-            decoded.Cycles.Add(MachineCycle.RAM_WRITE);
+            decoded.Cycles.Add(MachineCycle.RAM_WRITE_EXE);
         }
         else
         {
-            if (decoded.DataDriver == Register.RAM)
-                decoded.Cycles.Add(MachineCycle.RAM_READ);
-            
-            decoded.Cycles.Add(MachineCycle.INTERNAL_LATCH);
+            decoded.Cycles.Add(decoded.DataDriver == Register.RAM
+                ? MachineCycle.RAM_READ_EXE
+                : MachineCycle.INTERNAL_LATCH);
         }
         
         return decoded; // 01 110 110 (0x76) is already HLT

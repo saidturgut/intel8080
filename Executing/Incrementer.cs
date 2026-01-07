@@ -8,21 +8,13 @@ public partial class DataPath
     {
         if(signals.SideEffect == SideEffect.NONE)
             return;
-
+        
         if (PairIncrements.TryGetValue(signals.SideEffect, out var pair))
         {
             if (!pair.Decrement)
-            {
-                pair.Pair[0].Set((byte)(pair.Pair[0].Get() + 1));
-                if(pair.Pair[0].Get() == 0)
-                    pair.Pair[1].Set((byte)(pair.Pair[1].Get() + 1));
-            }
+                Increment(pair.Pair[0], pair.Pair[1]);
             else
-            {
-                pair.Pair[0].Set((byte)(pair.Pair[0].Get() - 1));
-                if(pair.Pair[0].Get() == 0xFF)
-                    pair.Pair[1].Set((byte)(pair.Pair[1].Get() - 1));
-            }
+                Decrement(pair.Pair[0], pair.Pair[1]);
             return;
         }
         
@@ -31,5 +23,19 @@ public partial class DataPath
             FLAGS |= (byte)ALUFlags.Carry;
         if (signals.SideEffect == SideEffect.CMC)
             FLAGS ^= (byte)ALUFlags.Carry;
+    }
+
+    private static void Increment(RegisterObject low, RegisterObject high)
+    {
+        low.Set((byte)(low.Get() + 1));
+        if(low.Get() == 0)
+            high.Set((byte)(high.Get() + 1));
+    }
+    
+    private static void Decrement(RegisterObject low, RegisterObject high)
+    {
+        low.Set((byte)(low.Get() - 1));
+        if(low.Get() == 0xFF)
+            high.Set((byte)(high.Get() - 1));
     }
 }
