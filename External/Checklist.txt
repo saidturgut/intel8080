@@ -1,7 +1,6 @@
 Jccc
 Cccc
 Rccc
-RST
 PUSH
 POP
 XTHL

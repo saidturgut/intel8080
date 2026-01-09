@@ -9,12 +9,7 @@ public class RAM
     
     private readonly byte[] ROM =
     [
-        0x31, 0x00, 0x40,   // LXI SP,4000h
-        0xCD, 0x09, 0x00,   // CALL 0009h
-        0x76,               // HLT
-        0x00,               // NOP
-        0x00,               // NOP
-        0xC9               // HLT
+        0x76,
     ];
     
     public void Init()
@@ -32,6 +27,7 @@ public class RAM
     {
         Memory[Merge(aBusH.Get(), aBusL.Get())] = dBus.Get();
         MemoryDump[Merge(aBusH.Get(), aBusL.Get())] = Memory[Merge(aBusH.Get(), aBusL.Get())];
+
     }
 
     private ushort Merge(byte high, byte low)

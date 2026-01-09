@@ -7,6 +7,8 @@ public partial class ControlUnitROM
     
     protected static readonly Dictionary<MachineCycle, Func<SignalSet>> MachineCyclesMethod = new()
     {
+        { MachineCycle.EMPTY, EMPTY },
+        { MachineCycle.HALT, HALT },
         { MachineCycle.FETCH, FETCH },
         
         { MachineCycle.RAM_READ_TMP, RAM_READ_TMP },
@@ -56,7 +58,7 @@ public enum MachineCycle
     
     ALU_EXECUTE,
 
-    EMPTY, //FIXED INSTRUCTIONS
+    EMPTY, HALT, //FIXED INSTRUCTIONS
     
     MICRO_CYCLE,
     

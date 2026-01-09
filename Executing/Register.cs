@@ -4,10 +4,10 @@ namespace i8080_emulator.Executing;
 
 public class ClockedRegister(Register nam)
 {
-    private Register name = nam;
+    public Register name = nam;
     private byte value;
     private byte temp;
-
+    
     public void Commit() 
         => value = temp;
     

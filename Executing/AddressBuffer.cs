@@ -5,8 +5,7 @@ public partial class DataPath
 {
     public void AddressBuffer()
     {
-        if(signals.AddressDriver == Register.NONE && 
-           signals.SideEffect != SideEffect.JMP)
+        if(signals.AddressDriver == Register.NONE)
             return;
 
         if (signals.SideEffect == SideEffect.SP_NXT)
@@ -18,17 +17,11 @@ public partial class DataPath
             {
                 Registers[Register.PC_L].Set(overrider[0].Get());
                 Registers[Register.PC_H].Set(overrider[1].Get());
-                addressPair = overrider;
+                return;
             }
             
             ABUS_L.Set(addressPair[0].GetTemp());
             ABUS_H.Set(addressPair[1].GetTemp());
-
-            /*if (signals.TakeSnapshot)
-            {
-                ABUS_L.SetSnapshot();
-                ABUS_H.SetSnapshot();
-            }*/
         }
     }
 }

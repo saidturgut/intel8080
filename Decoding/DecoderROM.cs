@@ -9,7 +9,7 @@ public class DecoderModel
     protected static readonly Dictionary<byte, FixedOpcode> FixedMicroCycles = new ()
         {
             { 0x00, new FixedOpcode(MachineCycle.EMPTY, SideEffect.NONE) }, // NOP
-            { 0x76, new FixedOpcode(MachineCycle.MICRO_CYCLE, SideEffect.HLT) }, // HLT
+            { 0x76, new FixedOpcode(MachineCycle.HALT, SideEffect.HALT) }, // HLT
             
             { 0xE9, new FixedOpcode(MachineCycle.MICRO_CYCLE, SideEffect.PCHL) },
 

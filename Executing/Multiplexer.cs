@@ -7,14 +7,17 @@ public partial class DataPath
     
     public void MultiplexerDrive()
     {        
-        if(signals.DataDriver == Register.NONE)
+        if(signals.DataDriver == Register.NONE || PcOverriders.ContainsKey(signals.SideEffect))
             return;
         
         if (signals.DataDriver == Register.RAM)
             RAM.Read(ABUS_H, ABUS_L, DBUS);
         else
         {
-            byte value = Registers[signals.DataDriver].Get();
+            byte value = signals.DataDriver != Register.IR
+                ? Registers[signals.DataDriver].Get()
+                : (byte)(((IR.Get() & 0b00_111_000) >> 3) * 8);
+            
             DBUS.Set(signals.SideEffect != SideEffect.CMA ? 
                 value : (byte)~value);
         }
@@ -22,12 +25,13 @@ public partial class DataPath
     
     public void MultiplexerLatch()
     {        
-        if(signals.DataLatcher == Register.NONE)
+        if(signals.DataLatcher == Register.NONE || PcOverriders.ContainsKey(signals.SideEffect))
             return;
         
         if (signals.DataLatcher == Register.IR)
         {
-            IR.Set(DBUS.Get()); return;
+            IR.Set(DBUS.Get());
+            return;
         }
         
         if (signals.DataLatcher == Register.RAM)

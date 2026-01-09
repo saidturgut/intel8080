@@ -44,14 +44,14 @@ public partial class ControlUnitROM
     private static SignalSet CALL_LOW() => new()
     {
         AddressDriver = Register.SP_L,
-        DataDriver = Register.PC_H,
+        DataDriver = Register.PC_L,
         DataLatcher = Register.RAM,
         SideEffect = SideEffect.SP_NXT,
     };
     private static SignalSet CALL_HIGH() => new()
     {
         AddressDriver = Register.SP_L,
-        DataDriver = Register.PC_L,
+        DataDriver = Register.PC_H,
         DataLatcher = Register.RAM,
         SideEffect = SideEffect.SP_NXT,
     };

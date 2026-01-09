@@ -9,14 +9,16 @@ public partial class DataPath : DataPathROM
     private readonly ALU ALU = new ();
     
     private readonly TriStateBus DBUS = new (); // DATA BUS 
-    private readonly AddressBus ABUS_H = new (); 
-    private readonly AddressBus ABUS_L = new ();
+    private readonly TriStateBus ABUS_H = new (); 
+    private readonly TriStateBus ABUS_L = new ();
     
     private PipelineRegister IR = new ();
     private ClockedRegister FLAGS = new (Register.FLAGS);
     
     private SignalSet signals = new ();
     
+    public bool HALT;
+
     public override void Init()
     {
         base.Init();
@@ -25,6 +27,9 @@ public partial class DataPath : DataPathROM
     
     public void Clear()
     {
+        if(signals.SideEffect == SideEffect.HALT)
+            HALT = true;
+        
         DBUS.Clear();
         ABUS_H.Clear();
         ABUS_L.Clear();
@@ -42,6 +47,11 @@ public partial class DataPath : DataPathROM
 
     public void Debug()
     {
+        if (Registers[Register.PC_L].GetTemp() == 0XFF)
+        {
+            Environment.Exit(5);
+        }
+        
         byte flags = FLAGS.GetTemp();
         Console.WriteLine($"PROGRAM COUNTER : {(ushort)((Registers[Register.PC_H].GetTemp() << 8) + Registers[Register.PC_L].GetTemp())}");
         Console.WriteLine($"IR : {IR.Get()}");

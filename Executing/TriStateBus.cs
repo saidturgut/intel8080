@@ -2,7 +2,7 @@ namespace i8080_emulator.Executing;
 
 public class TriStateBus
 {
-    protected byte value;
+    private byte value;
     private bool driven;
 
     public void Clear()
@@ -21,15 +21,4 @@ public class TriStateBus
     }
 
     public byte Get() => value;
-}
-
-public class AddressBus : TriStateBus
-{
-    private byte snap;
-
-    public void SetSnapshot() 
-        => snap = value;
-
-    public byte GetSnapshot()
-        => snap;
 }

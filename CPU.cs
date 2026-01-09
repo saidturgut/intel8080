@@ -13,8 +13,10 @@ public class CPU
     {
         DataPath.Init();
         
-        while (!ControlUnit.HALT)
+        while (!DataPath.HALT)
         {
+            Thread.Sleep(50);
+            
             Tick();
         }
         
@@ -24,9 +26,12 @@ public class CPU
     private void Tick()
     {
         DataPath.Commit();
+        DataPath.Debug();
 
         DataPath.Set(
         ControlUnit.Emit());
+        
+        if(DataPath.HALT) return;
         
         DataPath.Clear();
 
@@ -40,8 +45,6 @@ public class CPU
         ControlUnit.Decode(
         DataPath.GetIR());
         
-        DataPath.Debug();
-
         ControlUnit.Advance();
     }
 }

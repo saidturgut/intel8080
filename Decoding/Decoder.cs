@@ -48,6 +48,8 @@ public class Decoder : DecoderMultiplexer
                     case 0xF9: return COPY_HL(3);// SPHL (HL -> SP)
                 }
                 
+                if(BB_BBB_XXX(opcode) == 0b111) return  RST();
+                    
                 switch (BBBB_XXXX(opcode))
                 {
                     case 0b0110:

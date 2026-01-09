@@ -4,6 +4,9 @@ using Executing;
 
 public partial class ControlUnitROM
 {
+    private static SignalSet EMPTY() => new();
+    private static SignalSet HALT() => new() { SideEffect = SideEffect.HALT };
+    
     private static SignalSet FETCH() => new()
     {
         AddressDriver = Register.PC_L,

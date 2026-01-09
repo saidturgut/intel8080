@@ -27,5 +27,5 @@ public enum SideEffect
     STC, CMC, CMA,
     SWAP,
     
-    HLT,
+    HALT,
 }

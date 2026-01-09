@@ -9,14 +9,12 @@ public class ControlUnit : ControlUnitROM
     
     private MachineCycle currentCycle = MachineCycle.FETCH;
     
-    public bool HALT;
-
     public SignalSet Emit() 
         => MachineCyclesMethod[currentCycle]();
 
     public void Decode(byte IR)
     {
-        if (IR == 0x76) HALT = true; // HLT
+        Console.WriteLine("CURRENT CYCLE : "  + currentCycle);
         
         if (currentCycle == MachineCycle.FETCH)
         {
