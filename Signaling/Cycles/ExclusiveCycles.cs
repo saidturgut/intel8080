@@ -4,9 +4,6 @@ using Executing;
 
 public partial class ControlUnitROM
 {
-    private static SignalSet PCHL() => new() { SideEffect = SideEffect.PCHL };
-    private static SignalSet STC() => new () { SideEffect = SideEffect.STC };
-    private static SignalSet CMC() => new () { SideEffect = SideEffect.CMC };
     private static SignalSet CMA() => new()
     {
         DataDriver = Register.A,
@@ -29,17 +26,49 @@ public partial class ControlUnitROM
         DataLatcher = Register.RAM,
     };
 
-    // *** SET PCHL / SPHL WITH HL *** //
-    private static SignalSet COPY_HL_LOW() => new ()
+    // *** FOR CALL / XCHG / SPHL / PCHL *** //
+    private static SignalSet COPY_RP_LOW() => new ()
     {
-        DataDriver = Register.HL_L,
-        DataLatcher = decoded.RegisterPairs[0],
+        DataDriver = decoded.DrivePairs[0],
+        DataLatcher = decoded.LatchPairs[0],
         SideEffect = decoded.SideEffect,
     };
-    private static SignalSet COPY_HL_HIGH() => new ()
+    private static SignalSet COPY_RP_HIGH() => new ()
     {
-        DataDriver = Register.HL_H,
-        DataLatcher = decoded.RegisterPairs[1],
+        DataDriver = decoded.DrivePairs[1],
+        DataLatcher = decoded.LatchPairs[1],
         SideEffect = decoded.SideEffect,
+    };
+    
+    // *** CALL *** //
+    private static SignalSet CALL_LOW() => new()
+    {
+        AddressDriver = Register.SP_L,
+        DataDriver = Register.PC_H,
+        DataLatcher = Register.RAM,
+        SideEffect = SideEffect.SP_NXT,
+    };
+    private static SignalSet CALL_HIGH() => new()
+    {
+        AddressDriver = Register.SP_L,
+        DataDriver = Register.PC_L,
+        DataLatcher = Register.RAM,
+        SideEffect = SideEffect.SP_NXT,
+    };
+    
+    // *** RETURN *** //
+    private static SignalSet RET_LOW() => new()
+    {
+        AddressDriver = Register.SP_L,
+        DataDriver = Register.RAM,
+        DataLatcher = Register.WZ_L,
+        SideEffect = SideEffect.SP_INC,
+    };
+    private static SignalSet RET_HIGH() => new()
+    {
+        AddressDriver = Register.SP_L,
+        DataDriver = Register.RAM,
+        DataLatcher = Register.WZ_H,
+        SideEffect = SideEffect.SP_INC,
     };
 }

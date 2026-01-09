@@ -6,18 +6,18 @@ using Signaling;
 
 public class DecoderModel
 {
-    protected static readonly Dictionary<byte, MachineCycle> FixedOpcodes = new ()
+    protected static readonly Dictionary<byte, FixedOpcode> FixedMicroCycles = new ()
         {
-            { 0x00, MachineCycle.EMPTY }, // NOP
-            { 0x76, MachineCycle.EMPTY }, // HLT
+            { 0x00, new FixedOpcode(MachineCycle.EMPTY, SideEffect.NONE) }, // NOP
+            { 0x76, new FixedOpcode(MachineCycle.MICRO_CYCLE, SideEffect.HLT) }, // HLT
             
-            { 0xE9, MachineCycle.PCHL },
+            { 0xE9, new FixedOpcode(MachineCycle.MICRO_CYCLE, SideEffect.PCHL) },
 
-            { 0x37, MachineCycle.STC },
-            { 0x3F, MachineCycle.CMC },
-            { 0x2F, MachineCycle.CMA },
+            { 0x37, new FixedOpcode(MachineCycle.MICRO_CYCLE, SideEffect.STC) },
+            { 0x3F, new FixedOpcode(MachineCycle.MICRO_CYCLE, SideEffect.CMC) },
+            { 0x2F, new FixedOpcode(MachineCycle.CMA, SideEffect.CMA) },
         };
-
+    
     protected static readonly Dictionary<ALUOpcode, Operation> ALU_10 = new()
     {
         { ALUOpcode.ADD, Operation.ADD }, // 000
@@ -60,6 +60,7 @@ public class DecoderModel
         [Register.HL_L, Register.HL_H],
         [Register.SP_L, Register.SP_H],
         [Register.PC_L, Register.PC_H],
+        [Register.WZ_L, Register.WZ_H],
     };
 
     protected static readonly SideEffect[] IncrementOpcodes =
@@ -94,4 +95,10 @@ public class DecoderModel
         (((opcode & 0x30) >> 4) + ((opcode & 0x8) >> 3) * 4);
     protected static int GetRegisterPairNormal(byte opcode) => 
         (opcode & 0x30) >> 4;
+}
+
+public struct FixedOpcode(MachineCycle cycle, SideEffect effect)
+{
+    public readonly MachineCycle MachineCycle = cycle;
+    public readonly SideEffect SideEffect = effect;
 }

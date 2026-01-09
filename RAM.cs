@@ -9,10 +9,12 @@ public class RAM
     
     private readonly byte[] ROM =
     [
-        0x21, 0x34, 0x12,   // LXI H,1234h
-        0x11, 0x78, 0x56,   // LXI D,5678h
-        0xEB,               // XCHG
-        0x76
+        0x31, 0x00, 0x40,   // LXI SP,4000h
+        0xCD, 0x09, 0x00,   // CALL 0009h
+        0x76,               // HLT
+        0x00,               // NOP
+        0x00,               // NOP
+        0xC9               // HLT
     ];
     
     public void Init()

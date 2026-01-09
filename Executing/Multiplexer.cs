@@ -24,7 +24,7 @@ public partial class DataPath
     {        
         if(signals.DataLatcher == Register.NONE)
             return;
-
+        
         if (signals.DataLatcher == Register.IR)
         {
             IR.Set(DBUS.Get()); return;

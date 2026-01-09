@@ -17,7 +17,8 @@ public class DataPathROM
     
     protected Dictionary<Register, ClockedRegister[]> RegisterPairs = new();
     protected Dictionary<SideEffect, IncrementPair> PairIncrements = new();
-    
+    protected Dictionary<SideEffect, ClockedRegister[]> PcOverriders = new();
+
     public virtual void Init()
     {
         RegisterPairs = new()
@@ -28,6 +29,12 @@ public class DataPathROM
             { Register.HL_L , [Registers[Register.HL_L], Registers[Register.HL_H]]},
             { Register.SP_L , [Registers[Register.SP_L], Registers[Register.SP_H]]},
             { Register.WZ_L , [Registers[Register.WZ_L], Registers[Register.WZ_H]]},
+        };
+
+        PcOverriders = new()
+        {
+            { SideEffect.PCHL, RegisterPairs[Register.HL_L] },
+            { SideEffect.JMP, RegisterPairs[Register.WZ_L] },
         };
         
         PairIncrements = new()

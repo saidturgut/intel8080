@@ -18,7 +18,6 @@ public partial class ControlUnitROM
         DataLatcher = Register.RAM,
     };
     
-    
     // *** READ / WRITE AND EXECUTE *** //
     private static SignalSet RAM_READ_EXE() => new ()
     {
@@ -47,14 +46,14 @@ public partial class ControlUnitROM
     {
         AddressDriver = Register.PC_L,
         DataDriver = Register.RAM,
-        DataLatcher = decoded.RegisterPairs[0],
+        DataLatcher = decoded.LatchPairs[0],
         SideEffect = SideEffect.PC_INC,
     };
     private static SignalSet RAM_READ_IMM_HIGH() => new ()
     {
         AddressDriver = Register.PC_L,
         DataDriver = Register.RAM,
-        DataLatcher = decoded.RegisterPairs[1],
+        DataLatcher = decoded.LatchPairs[1],
         SideEffect = SideEffect.PC_INC,
     };
 }

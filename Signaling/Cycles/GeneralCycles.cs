@@ -29,4 +29,7 @@ public partial class ControlUnitROM
         AluOperation = (ALUOperation)decoded.AluOperation!,
         DataLatcher = decoded.DataLatcher,
     };
+
+    private static SignalSet MICRO_CYCLE() => new()
+        { AddressDriver = Register.PC_L, SideEffect = decoded.SideEffect };
 }

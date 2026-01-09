@@ -10,7 +10,7 @@ public partial class DecoderMultiplexer
         Decoded decoded = new()
         {
             AddressDriver = Register.WZ_L,
-            RegisterPairs = [Register.WZ_L, Register.WZ_H],
+            LatchPairs = EncodedRegisterPairs[5],// WZ
         };
         decoded.Cycles.Add(MachineCycle.RAM_READ_IMM_LOW);
         decoded.Cycles.Add(MachineCycle.RAM_READ_IMM_HIGH);

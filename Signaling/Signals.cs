@@ -9,22 +9,23 @@ public struct SignalSet()
     public Register DataLatcher = Register.NONE;
     public ALUOperation? AluOperation = null;
     public SideEffect SideEffect = SideEffect.NONE;
+    public bool TakeSnapshot = false;
 }
 
 public enum SideEffect
 {
     NONE,
-    PC_INC, PCHL,
+    PC_INC, PCHL, JMP, 
     
-    SP_INC, SP_DCR,
+    SP_NXT, SP_INC, SP_DCR,
     
     BC_INC, BC_DCR,
     DE_INC, DE_DCR,
     HL_INC, HL_DCR,
-    
     WZ_INC,
     
     STC, CMC, CMA,
-    
     SWAP,
+    
+    HLT,
 }

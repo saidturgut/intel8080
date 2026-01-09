@@ -37,7 +37,7 @@ public partial class DecoderMultiplexer : DecoderModel
 
     protected Decoded LXI(byte opcode)
     {
-        Decoded decoded = new() { RegisterPairs = 
+        Decoded decoded = new() { LatchPairs = 
             EncodedRegisterPairs[GetRegisterPair(opcode)] };
         
         decoded.Cycles.Add(MachineCycle.RAM_READ_IMM_LOW);

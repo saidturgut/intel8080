@@ -23,17 +23,22 @@ public partial class ControlUnitROM
 
         { MachineCycle.ALU_EXECUTE, ALU_EXECUTE },
 
-        { MachineCycle.PCHL, PCHL },
-        { MachineCycle.STC, STC },
-        { MachineCycle.CMC, CMC },
+        { MachineCycle.MICRO_CYCLE, MICRO_CYCLE },
+        
         { MachineCycle.CMA, CMA },
         { MachineCycle.INX_DCX, INX_DCX },
 
         { MachineCycle.RAM_READ_H, RAM_READ_H },
         { MachineCycle.RAM_WRITE_H, RAM_WRITE_H },
         
-        { MachineCycle.COPY_HL_LOW, COPY_HL_LOW },
-        { MachineCycle.COPY_HL_HIGH, COPY_HL_HIGH },
+        { MachineCycle.COPY_RP_LOW, COPY_RP_LOW },
+        { MachineCycle.COPY_RP_HIGH, COPY_RP_HIGH },
+        
+        { MachineCycle.CALL_LOW, CALL_LOW },
+        { MachineCycle.CALL_HIGH, CALL_HIGH },
+        
+        { MachineCycle.RET_LOW, RET_LOW },
+        { MachineCycle.RET_HIGH, RET_HIGH },
     };
 }
 
@@ -53,11 +58,15 @@ public enum MachineCycle
 
     EMPTY, //FIXED INSTRUCTIONS
     
-    PCHL, 
-    STC, CMC, CMA,
+    MICRO_CYCLE,
+    
+    CMA,
     INX_DCX, 
     
     RAM_READ_H, RAM_WRITE_H,
     
-    COPY_HL_LOW, COPY_HL_HIGH,
+    COPY_RP_LOW, COPY_RP_HIGH,
+    
+    CALL_LOW, CALL_HIGH,
+    RET_LOW, RET_HIGH,
 }

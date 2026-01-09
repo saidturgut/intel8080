@@ -21,6 +21,9 @@ public class ClockedRegister(Register nam)
         
         return value;
     }
+    
+    public byte GetTemp()
+        => temp;
 };
 
 public class PipelineRegister

@@ -9,8 +9,8 @@ public partial class DataPath : DataPathROM
     private readonly ALU ALU = new ();
     
     private readonly TriStateBus DBUS = new (); // DATA BUS 
-    private readonly TriStateBus ABUS_H = new (); 
-    private readonly TriStateBus ABUS_L = new ();
+    private readonly AddressBus ABUS_H = new (); 
+    private readonly AddressBus ABUS_L = new ();
     
     private PipelineRegister IR = new ();
     private ClockedRegister FLAGS = new (Register.FLAGS);
@@ -42,20 +42,20 @@ public partial class DataPath : DataPathROM
 
     public void Debug()
     {
-        byte flags = FLAGS.Get();
-        Console.WriteLine($"PROGRAM COUNTER : {(ushort)((Registers[Register.PC_H].Get() << 8) + Registers[Register.PC_L].Get())}");
+        byte flags = FLAGS.GetTemp();
+        Console.WriteLine($"PROGRAM COUNTER : {(ushort)((Registers[Register.PC_H].GetTemp() << 8) + Registers[Register.PC_L].GetTemp())}");
         Console.WriteLine($"IR : {IR.Get()}");
-        Console.WriteLine($"TMP : {Registers[Register.TMP].Get()}");
-        Console.WriteLine($"B : {Registers[Register.B].Get()}");
-        Console.WriteLine($"C : {Registers[Register.C].Get()}");
-        Console.WriteLine($"D : {Registers[Register.D].Get()}");
-        Console.WriteLine($"E : {Registers[Register.E].Get()}");
-        Console.WriteLine($"H : {Registers[Register.HL_H].Get()}");
-        Console.WriteLine($"L : {Registers[Register.HL_L].Get()}");
-        Console.WriteLine($"A : {Registers[Register.A].Get()}");
-        Console.WriteLine($"HL : {(ushort)((Registers[Register.HL_H].Get() << 8) + Registers[Register.HL_L].Get())}");
-        Console.WriteLine($"SP : {(ushort)((Registers[Register.SP_H].Get() << 8) + Registers[Register.SP_L].Get())}");
-        Console.WriteLine($"WZ : {(ushort)((Registers[Register.WZ_H].Get() << 8) + Registers[Register.WZ_L].Get())}");
+        Console.WriteLine($"TMP : {Registers[Register.TMP].GetTemp()}");
+        Console.WriteLine($"B : {Registers[Register.B].GetTemp()}");
+        Console.WriteLine($"C : {Registers[Register.C].GetTemp()}");
+        Console.WriteLine($"D : {Registers[Register.D].GetTemp()}");
+        Console.WriteLine($"E : {Registers[Register.E].GetTemp()}");
+        Console.WriteLine($"H : {Registers[Register.HL_H].GetTemp()}");
+        Console.WriteLine($"L : {Registers[Register.HL_L].GetTemp()}");
+        Console.WriteLine($"A : {Registers[Register.A].GetTemp()}");
+        Console.WriteLine($"HL : {(ushort)((Registers[Register.HL_H].GetTemp() << 8) + Registers[Register.HL_L].GetTemp())}");
+        Console.WriteLine($"SP : {(ushort)((Registers[Register.SP_H].GetTemp() << 8) + Registers[Register.SP_L].GetTemp())}");
+        Console.WriteLine($"WZ : {(ushort)((Registers[Register.WZ_H].GetTemp() << 8) + Registers[Register.WZ_L].GetTemp())}");
         Console.WriteLine($"FLAGS : S={(flags >> 7) & 1} Z={(flags >> 6) & 1} AC={(flags >> 4) & 1} P={(flags >> 2) & 1} CY={(flags >> 0) & 1}");
     }
 

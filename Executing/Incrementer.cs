@@ -6,7 +6,7 @@ public partial class DataPath
 {
     public void Incrementer()
     {
-        if(signals.SideEffect is SideEffect.NONE or SideEffect.PCHL)
+        if(signals.SideEffect == SideEffect.NONE || PcOverriders.ContainsKey(signals.SideEffect))
             return;
         
         if (PairIncrements.TryGetValue(signals.SideEffect, out var pair))

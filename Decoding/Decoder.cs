@@ -6,7 +6,7 @@ public class Decoder : DecoderMultiplexer
     public Decoded Decode(byte opcode)
     {
         // CHECK FIXED OPCODES
-        if (FixedOpcodes.TryGetValue(opcode, out var value))
+        if (FixedMicroCycles.TryGetValue(opcode, out var value))
             return FamilyFXD(value);
         
         // CHECK INSTRUCTION FAMILY
@@ -41,6 +41,9 @@ public class Decoder : DecoderMultiplexer
             {
                 switch (opcode)
                 {
+                    case 0xCD: return CALL();// CALL
+                    case 0xC9: return RET();// RET
+                    case 0xC3: return JMP();// JMP
                     case 0xEB: return COPY_HL(1);// XCHG (HL <-> DE)
                     case 0xF9: return COPY_HL(3);// SPHL (HL -> SP)
                 }

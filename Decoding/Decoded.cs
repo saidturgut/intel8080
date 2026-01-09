@@ -11,8 +11,11 @@ public struct Decoded()
     public Register DataLatcher = Register.NONE;
     public SideEffect SideEffect = SideEffect.NONE;
 
-    public Register[] RegisterPairs = [];
+    public Register[] DrivePairs = [];
+    public Register[] LatchPairs = [];
     
+    public bool TakeSnapshot = false;
+
     public ALUOperation? AluOperation = null;
     
     public readonly List<MachineCycle> Cycles = [MachineCycle.FETCH];

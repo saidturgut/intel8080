@@ -29,7 +29,6 @@ public class CPU
         ControlUnit.Emit());
         
         DataPath.Clear();
-        DataPath.Debug();
 
         DataPath.ControlALU();
         DataPath.AddressBuffer();
@@ -41,6 +40,8 @@ public class CPU
         ControlUnit.Decode(
         DataPath.GetIR());
         
+        DataPath.Debug();
+
         ControlUnit.Advance();
     }
 }
