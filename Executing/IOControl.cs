@@ -1,16 +1,13 @@
 namespace i8080_emulator.Executing;
-using InputOutput.Devices;
+using External.Devices;
 using Signaling;
 
 public partial class DataPath
 {
-    public void HostInput() 
-        => IO.Terminal.HostInput();
+    public void HostInput() => IO.HostInput();
     
     public void IOControl()
     {
-        IO.Terminal.HostInput();
-        
         if(signals.SideEffect == SideEffect.NONE)
             return;
 

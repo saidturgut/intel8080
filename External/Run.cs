@@ -1,6 +1,6 @@
 ﻿namespace i8080_emulator.External;
 
-internal static class RunEmulator
+internal static class Run
 {
     private static readonly CPU Cpu = new ();
 

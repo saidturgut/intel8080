@@ -1,9 +1,11 @@
-namespace i8080_emulator.InputOutput.Devices;
+namespace i8080_emulator.External.Devices;
 
 public class Terminal
 {
-    Queue<byte> inputBuffer = new();
+    private readonly Queue<byte> inputBuffer = new();
 
+    public void Init(){}
+    
     public byte ReadStatus()
         => (byte)(inputBuffer.Count > 0 ? 1 : 0);
 
