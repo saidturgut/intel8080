@@ -5,13 +5,26 @@ using Executing;
 
 public class Ram
 {
-    private readonly byte[] Memory = new byte[0x1000];
+    private readonly byte[] Memory = new byte[0x150];
 
+    private byte[] Rom =
+    [
+        0xEB,
+        0x76,
+    ];
+
+    private Dictionary<ushort, byte> Dump = new();
+    
     public void Init(bool hexDump)
     {
-        Assembler.Run();
-        LoadArray(0, File.ReadAllBytes("Test.bin"));
+        /*Assembler.Run();
+        LoadArray(0, File.ReadAllBytes("Test.bin"));*/
 
+        LoadArray(0, Rom);
+        
+        LoadByte(0x64, 0x5F);
+        LoadByte(0x50, 0x1F);
+        
         if (hexDump)
             HexDump.Run(Memory);
     }
@@ -28,11 +41,20 @@ public class Ram
         => Memory[address] = value;
 
     public void Read(TriStateBus aBusL, TriStateBus aBusH, TriStateBus dBus)
-        => dBus.Set(Memory[Merge(aBusL.Get(), aBusH.Get())]);
-
+    {
+        dBus.Set(Memory[Merge(aBusL.Get(), aBusH.Get())]);
+        Console.WriteLine(Merge(aBusL.Get(), aBusH.Get()));
+    }
+    
     public void Write(TriStateBus aBusL, TriStateBus aBusH, TriStateBus dBus)
-        => Memory[Merge(aBusL.Get(), aBusH.Get())] = dBus.Get();
+    {
+        Memory[Merge(aBusL.Get(), aBusH.Get())] = dBus.Get();
+        Console.WriteLine($"RAM[{Hex(Merge(aBusL.Get(), aBusH.Get()))}]: {Hex(dBus.Get())}");
+    }
 
     private ushort Merge(byte low, byte high)
         => (ushort)(low + (high << 8));
+    
+    private string Hex(ushort input)         
+        => $"0x{Convert.ToString(input, 16).ToUpper()}";
 }

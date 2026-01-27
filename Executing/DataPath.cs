@@ -15,7 +15,7 @@ public partial class DataPath : DataPathRom
 
     public void Init()
     {
-        Ram.Init(true);
+        Ram.Init(false);
         
         for (int i = 0; i < Registers.Length; i++)
         {

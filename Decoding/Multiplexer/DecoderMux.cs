@@ -9,17 +9,13 @@ public partial class DecoderMux : DecoderRom
         { 0x00, MicroCycle.EMPTY },
         { 0x76, MicroCycle.HALT },
     };
-
-    protected static Decoded FIXED(byte ir) => new()
-        { MicroCycles = [FixedOpcodes[ir]], };
+    
+    protected static Decoded FIXED() => new()
+        { MicroCycles = [FixedOpcodes[opcode]], };
 
     public static Decoded FETCH() => new()
     {
         AddressDriver = Register.PC_L,
-        MicroCycles =
-        [
-            MicroCycle.FETCH, MicroCycle.ADDR_INC,
-            MicroCycle.DECODE
-        ],
+        MicroCycles = [MicroCycle.FETCH, MicroCycle.DECODE],
     };
 }

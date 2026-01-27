@@ -8,6 +8,9 @@ public struct SignalSet()
     public AluAction? AluAction = null;
     public IncAction IncAction = IncAction.NONE;
     public Register DataLatcher = Register.NONE;
+    
+    public State State = State.EXECUTE;
+    public bool Index = false;
 }
 
 public struct AluAction(Operation operation, FlagMask flagMask, bool carryIn)
@@ -40,7 +43,7 @@ public enum Register
     HL_L, HL_H,
     WZ_L, WZ_H,
     
-    A, B, C, D, E,
-    IR ,TMP, PSW,
+    C, B, E, D,
+    A, IR ,TMP, PSW,
     RAM,
 }

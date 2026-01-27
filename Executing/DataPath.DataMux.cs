@@ -8,23 +8,31 @@ public partial class DataPath
     
     public void DataDrive()
     {
-        if(signals.DataDriver is Register.NONE)
-            return;
-
-        if (signals.DataDriver is Register.RAM)
-            Ram.Read(AbusL, AbusH, Dbus);
-        else
-            Dbus.Set(Registers[(byte)signals.DataLatcher].Get());
+        switch (signals.DataDriver)
+        {
+            case Register.NONE:
+                return;
+            case Register.RAM:
+                Ram.Read(AbusL, AbusH, Dbus);
+                return;
+            default:
+                Dbus.Set(Registers[(byte)signals.DataDriver].Get());
+                return;
+        }
     }
     
     public void DataLatch()
     {
-        if(signals.DataLatcher is Register.NONE)
-            return;
-
-        if (signals.DataLatcher is Register.RAM)
-            Ram.Write(AbusL, AbusH, Dbus);
-        else
-            Registers[(byte)signals.DataLatcher].Set(Dbus.Get());
+        switch (signals.DataLatcher)
+        {
+            case Register.NONE:
+                return;
+            case Register.RAM:
+                Ram.Write(AbusL, AbusH, Dbus);
+                break;
+            default:
+                Registers[(byte)signals.DataLatcher].Set(Dbus.Get());
+                break;
+        }
     }
 }

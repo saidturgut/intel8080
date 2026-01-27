@@ -8,5 +8,7 @@ public struct Decoded()
     public Register DataDriver = Register.NONE;
     public Register DataLatcher = Register.NONE;
     
+    public Register[] Pair = [];
+    
     public List<MicroCycle> MicroCycles = [];
 }

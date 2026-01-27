@@ -25,13 +25,3 @@ public class ClockedRegister()
     public void Commit() 
         => commit = value;
 };
-
-public class PipelineRegister
-{
-    private byte value;
-    
-    public void Set(byte input) 
-        => value = input;
-   
-    public byte Get() => value;
-}

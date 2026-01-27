@@ -14,7 +14,7 @@ public class Cpu
         DataPath.Init();
         MicroUnit.Init();
         
-        while (!MicroUnit.HALT)
+        while (MicroUnit.State is not State.HALT)
         {
             Tick();
         }
@@ -24,7 +24,7 @@ public class Cpu
     {
         DataPath.Clear();
         DataPath.Receive(
-        MicroUnit.Emit(DataPath.GetIr()));
+        MicroUnit.Emit());
         
         DataPath.AddressDrive();
         DataPath.DataDrive();
@@ -34,6 +34,6 @@ public class Cpu
         DataPath.Commit();
         DataPath.Debug();
         
-        MicroUnit.Advance();
+        MicroUnit.Advance(DataPath.GetIr());
     }
 }

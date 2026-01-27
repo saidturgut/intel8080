@@ -4,20 +4,78 @@ using Signaling;
 
 public partial class DecoderMux
 {
-    protected static Decoded MOV(byte ir)
+    protected static Decoded MOV() => new()
     {
-        Decoded decoded = new()
-        {
-            AddressDriver = Register.PC_L,
-            DataDriver = EncodedRegisters[ir & 0x7],
-            DataLatcher = EncodedRegisters[(ir >> 3) & 0x7],
-        };
-        
-        if(decoded.DataDriver is Register.RAM)
-            decoded.MicroCycles.Add(MicroCycle.ADDR_INC);
-        
-        decoded.MicroCycles.Add(MicroCycle.REG_TO_REG);
-        
-        return decoded;
-    }
+        AddressDriver = Register.HL_L,
+        DataDriver = EncodedRegisters[zz_zzz_xxx()],
+        DataLatcher = EncodedRegisters[zz_xxx_zzz()],
+        MicroCycles = [MicroCycle.MOVE_LOAD]
+    };
+
+    protected static Decoded MVI() => new()
+    {
+        AddressDriver = Register.HL_L,
+        DataDriver = Register.TMP,
+        DataLatcher = EncodedRegisters[zz_xxx_zzz()],
+        MicroCycles = [MicroCycle.MOVE_IMM, MicroCycle.MOVE_LOAD,]
+    };
+    
+    protected static Decoded LXI() => new()
+    {
+        DataDriver = Register.RAM,
+        Pair = EncodedPairs[zz_xxz_zzz()],
+        MicroCycles = [..MovePairImm]
+    };
+
+    protected static Decoded LDA_STA(bool lda) => new()
+    {
+        AddressDriver = Register.WZ_L,
+        DataDriver = Register.RAM,
+        DataLatcher = Register.A,
+        Pair = [Register.WZ_L, Register.WZ_H],
+        MicroCycles =
+        [
+            ..MovePairImm,
+            lda ? MicroCycle.MOVE_LOAD : MicroCycle.MOVE_STORE,
+        ]
+    };
+
+    protected static Decoded LDAX_STAX(bool ldax) => new()
+    {
+        AddressDriver = EncodedPairs[zz_xxz_zzz()][0],
+        DataDriver = Register.RAM,
+        DataLatcher = Register.A,
+        MicroCycles = [ldax ? MicroCycle.MOVE_LOAD : MicroCycle.MOVE_STORE],
+    };
+
+    
+    protected static Decoded LHLD_SHLD(bool lhld) => new()
+    {
+        AddressDriver = Register.WZ_L,
+        Pair = [Register.WZ_L, Register.WZ_H, Register.HL_L, Register.HL_H],
+        MicroCycles =
+        [
+            ..MovePairImm,
+            ..lhld ? MovePairLoad : MovePairStore,
+        ]
+    };
+
+    protected static Decoded XCHG() => new()
+    {
+        Pair = [Register.HL_L, Register.E, Register.HL_H, Register.D],
+        MicroCycles =
+        [
+            MicroCycle.MOVE_PAIR_TMP_LOAD,
+            MicroCycle.MOVE_PAIR_TMP_STORE,
+            MicroCycle.MOVE_PAIR_TMP_LOAD, 
+            MicroCycle.MOVE_PAIR_TMP_STORE,
+        ],
+    };
+
+    private static readonly MicroCycle[] MovePairImm =
+        [MicroCycle.MOVE_PAIR_IMM, MicroCycle.MOVE_PAIR_IMM,];
+    private static readonly MicroCycle[] MovePairLoad =
+        [MicroCycle.MOVE_PAIR_LOAD, MicroCycle.MOVE_PAIR_LOAD,];
+    private static readonly MicroCycle[] MovePairStore =
+        [MicroCycle.MOVE_PAIR_STORE, MicroCycle.MOVE_PAIR_STORE,];
 }

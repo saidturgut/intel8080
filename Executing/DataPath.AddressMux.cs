@@ -6,24 +6,23 @@ public partial class DataPath
 {
     public void AddressDrive()
     {
-        if (signals.IncAction is not IncAction.NONE)
-        {
-            Increment();
-            return;
-        }
-        
         if(signals.AddressDriver is Register.NONE)
             return;
         
-        AbusL.Set(Registers[(byte)signals.AddressDriver].Get());
-        AbusH.Set(Registers[((byte)signals.AddressDriver) + 1].Get());
+        byte lowLatch = Registers[(byte)signals.AddressDriver].Get();
+        byte highLatch = Registers[(byte)signals.AddressDriver + 1].Get();
+
+        AbusL.Set(lowLatch);
+        AbusH.Set(highLatch);
+        
+        if (signals.IncAction is not IncAction.NONE)
+        {
+            Increment(lowLatch, highLatch);
+        }
     }
 
-    private void Increment()
+    private void Increment(byte lowLatch,  byte highLatch)
     {
-        byte lowLatch = Registers[(byte)signals.AddressDriver].Get();
-        byte highLatch = Registers[(byte)signals.AddressDriver].Get();
-
         switch (signals.IncAction)
         {
             case IncAction.INC:
