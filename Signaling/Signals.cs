@@ -1,32 +1,46 @@
 namespace i8080_emulator.Signaling;
-using Executing.Computing;
 using Executing;
 
 public struct SignalSet()
 {
     public Register AddressDriver = Register.NONE;
     public Register DataDriver = Register.NONE;
+    public AluAction? AluAction = null;
+    public IncAction IncAction = IncAction.NONE;
     public Register DataLatcher = Register.NONE;
-    public ALUOperation? AluOperation = null;
-    public SideEffect SideEffect = SideEffect.NONE;
 }
 
-public enum SideEffect
+public struct AluAction(Operation operation, FlagMask flagMask, bool carryIn)
+{
+    public Operation Operation = Operation.NONE;
+    public FlagMask FlagMask = FlagMask.NONE;
+    public bool UseCarry = false;
+}
+
+public enum IncAction
+{
+    NONE, INC, DEC,
+}
+
+public enum Operation
 {
     NONE,
-    IO_READ, IO_WRITE,
+}
+
+public enum FlagMask
+{
+    NONE, ALL,
+}
+
+public enum Register
+{
+    NONE = -1,
+    PC_L, PC_H,
+    SP_L, SP_H,
+    HL_L, HL_H,
+    WZ_L, WZ_H,
     
-    PC_INC, PCHL, JMP, 
-    
-    SP_NXT, SP_INC, SP_DCR,
-    
-    BC_INC, BC_DCR,
-    DE_INC, DE_DCR,
-    HL_INC, HL_DCR,
-    WZ_INC,
-    
-    STC, CMC, CMA,
-    SWAP, XTHL, XTHL_SP,
-    
-    HALT,
+    A, B, C, D, E,
+    IR ,TMP, PSW,
+    RAM,
 }
