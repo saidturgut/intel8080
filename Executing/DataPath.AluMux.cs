@@ -15,11 +15,15 @@ public partial class DataPath
         
         AluOutput output = Alu.Compute(new AluInput
         {
-            A = Dbus.Get(),
+            A = Registers[(byte)Register.A].Get(),
             B = Registers[(byte)Register.TMP].Get(),
             C = (byte)(action.UseCarry && GetFlag(PswFlag.Carry) ? 1 : 0),
-        });
+        }, action.Operation);
         
         Registers[(byte)Register.A].Set(output.Result);
+        
+        Registers[(byte)Register.PSW].Set((byte)(
+            (Registers[(byte)Register.PSW].Get() & (byte)~action.FlagMask) | 
+            (output.Flags & (byte)action.FlagMask)));
     }
 }

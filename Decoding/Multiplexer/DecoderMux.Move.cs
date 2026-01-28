@@ -2,6 +2,7 @@ namespace i8080_emulator.Decoding.Multiplexer;
 using Signaling.Cycles;
 using Signaling;
 
+// 00b AND 01b INSTRUCTIONS
 public partial class DecoderMux
 {
     protected static Decoded MOV() => new()
@@ -62,16 +63,19 @@ public partial class DecoderMux
 
     protected static Decoded XCHG() => new()
     {
-        Pair = [Register.HL_L, Register.E, Register.HL_H, Register.D],
+        Pair = [Register.HL_L, Register.WZ_L, Register.E, Register.HL_L, Register.WZ_L, Register.E,
+            Register.HL_H, Register.WZ_L, Register.D, Register.HL_H, Register.WZ_L, Register.D],
         MicroCycles =
         [
-            MicroCycle.MOVE_PAIR_TMP_LOAD,
-            MicroCycle.MOVE_PAIR_TMP_STORE,
-            MicroCycle.MOVE_PAIR_TMP_LOAD, 
-            MicroCycle.MOVE_PAIR_TMP_STORE,
+            MicroCycle.MOVE_PAIR_TO_TMP, MicroCycle.MOVE_TMP_TO_PAIR, 
+            MicroCycle.MOVE_PAIR_TO_TMP, MicroCycle.MOVE_TMP_TO_PAIR,
+            MicroCycle.MOVE_PAIR_TO_TMP, MicroCycle.MOVE_TMP_TO_PAIR,
+            MicroCycle.MOVE_PAIR_TO_TMP, MicroCycle.MOVE_TMP_TO_PAIR, 
+            MicroCycle.MOVE_PAIR_TO_TMP, MicroCycle.MOVE_TMP_TO_PAIR,
+            MicroCycle.MOVE_PAIR_TO_TMP, MicroCycle.MOVE_TMP_TO_PAIR,
         ],
     };
-
+    
     private static readonly MicroCycle[] MovePairImm =
         [MicroCycle.MOVE_PAIR_IMM, MicroCycle.MOVE_PAIR_IMM,];
     private static readonly MicroCycle[] MovePairLoad =

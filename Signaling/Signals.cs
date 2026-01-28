@@ -1,4 +1,5 @@
 namespace i8080_emulator.Signaling;
+using Executing.Computing;
 using Executing;
 
 public struct SignalSet()
@@ -13,26 +14,16 @@ public struct SignalSet()
     public bool Index = false;
 }
 
-public struct AluAction(Operation operation, FlagMask flagMask, bool carryIn)
+public struct AluAction(Operation operation, PswFlag flagMask, bool useCarry)
 {
-    public Operation Operation = Operation.NONE;
-    public FlagMask FlagMask = FlagMask.NONE;
-    public bool UseCarry = false;
+    public Operation Operation = operation;
+    public PswFlag FlagMask = flagMask;
+    public bool UseCarry = useCarry;
 }
 
 public enum IncAction
 {
     NONE, INC, DEC,
-}
-
-public enum Operation
-{
-    NONE,
-}
-
-public enum FlagMask
-{
-    NONE, ALL,
 }
 
 public enum Register

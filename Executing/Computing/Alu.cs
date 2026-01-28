@@ -1,37 +1,20 @@
 namespace i8080_emulator.Executing.Computing;
 
-public class Alu
+public class Alu : AluRom
 {
-    public AluOutput Compute(AluInput input)
+    public AluOutput Compute(AluInput input, Operation operation)
     {
-        AluOutput output = new AluOutput();
+        AluOutput output = Operations[(byte)operation](input);
+        
+        if ((output.Result & 0x80) != 0) output.Flags |= (byte)PswFlag.Sign;
+        if (output.Result == 0) output.Flags |= (byte)PswFlag.Zero;
+        
+        byte ones = 0;
+        for (byte i = 0; i < 8; i++) 
+            ones += (byte)((output.Result >> i) & 1);
+        
+        if (ones % 2 == 0) output.Flags |= (byte)PswFlag.Parity;
         
         return output;
     }
-}
-
-public struct AluInput
-{
-    public byte A;
-    public byte B;
-    public byte C;
-}
-
-public struct AluOutput
-{
-    public byte Result;
-    public byte Flags;
-}
-
-[Flags]
-public enum PswFlag
-{
-    Sign = 1 << 7,
-    Zero = 1 << 6,
-    //000000 = 1 <<  5,
-    Auxiliary = 1 <<  4,
-    //000000 = 1 <<  3,
-    Parity = 1 <<  2,
-    //111111 = 1 <<  1,
-    Carry = 1 <<  0,
 }

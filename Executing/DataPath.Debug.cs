@@ -10,7 +10,7 @@ public partial class DataPath
         Registers[(byte)Register.D].Set(0x12);
         Registers[(byte)Register.E].Set(0x0B);
         Registers[(byte)Register.A].Set(0x20);
-        Registers[(byte)Register.B].Set(0x01);
+        Registers[(byte)Register.B].Set(0x20);
         Registers[(byte)Register.C].Set(0x30);
     }
     

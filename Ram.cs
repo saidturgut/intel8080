@@ -9,7 +9,7 @@ public class Ram
 
     private byte[] Rom =
     [
-        0xEB,
+        0x90,
         0x76,
     ];
 

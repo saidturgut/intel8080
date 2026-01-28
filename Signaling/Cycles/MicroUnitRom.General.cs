@@ -4,10 +4,6 @@ using Decoding;
 public partial class MicroUnitRom
 {
     private static SignalSet EMPTY() => new();
-    private static SignalSet HALT() => new() { State = State.HALT };
-    private static SignalSet DECODE() => new() { State = State.DECODE };
-    private static SignalSet INDEX() => new();
-    
     private static SignalSet FETCH() => new()
     {
         AddressDriver = Register.PC_L,
@@ -15,6 +11,13 @@ public partial class MicroUnitRom
         DataDriver = Register.RAM,
         DataLatcher = Register.IR,
         State = State.FETCH,
+    };
+    private static SignalSet DECODE() => new() { State = State.DECODE };
+    private static SignalSet HALT() => new() { State = State.HALT };
+
+    private static SignalSet ALU_EXECUTE() => new()
+    {
+        AluAction = decoded.AluAction!.Value,
     };
     
     private static SignalSet MOVE_IMM() => new()
@@ -62,13 +65,13 @@ public partial class MicroUnitRom
         Index = true,
     };
     
-    private static SignalSet MOVE_PAIR_TMP_LOAD() => new()
+    private static SignalSet MOVE_PAIR_TO_TMP() => new()
     {
         DataDriver = decoded.Pair[pairIndex],
         DataLatcher = Register.TMP,
         Index = true,
     };
-    private static SignalSet MOVE_PAIR_TMP_STORE() => new()
+    private static SignalSet MOVE_TMP_TO_PAIR() => new()
     {
         DataDriver = Register.TMP,
         DataLatcher = decoded.Pair[pairIndex],
