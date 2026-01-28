@@ -18,9 +18,7 @@ public partial class DataPath : DataPathRom
         Ram.Init(false);
         
         for (int i = 0; i < Registers.Length; i++)
-        {
             Registers[i] = new ClockedRegister();
-        }
         
         DebugInit();
     }
@@ -37,15 +35,13 @@ public partial class DataPath : DataPathRom
 
     public byte GetIr()
         => Registers[(byte)Register.IR].Get();
-
-    private bool GetFlag(PswFlag flag) 
-        => (Registers[(byte)Register.PSW].Get() & (byte)flag) != 0;
-
+    
+    private ClockedRegister Reg(Register register)
+        => Registers[(byte)register];
+    
     public void Commit()
     {
         foreach (ClockedRegister register in Registers)
-        {
             register.Commit();
-        }
     }
 }

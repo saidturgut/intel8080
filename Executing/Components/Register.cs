@@ -4,12 +4,6 @@ public class ClockedRegister()
 {
     private byte commit;
     private byte value;
-
-    public void Init(byte input)
-    {
-        commit = input;
-        value = input;
-    }
     
     public void Set(byte input) 
         => value = input;

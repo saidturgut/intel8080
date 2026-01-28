@@ -27,10 +27,15 @@ public class Decoder : DecoderMux
                     case 0x1: return LXI();
                     case 0x2: return LDAX_STAX(false);
                     case 0xA: return LDAX_STAX(true);
+                    case 0x3: return INX_DCX(true);
+                    case 0xB: return INX_DCX(false);
                 }
                 switch (zz_zzz_xxx())
                 {
+                    case 0x4: return INR_DCR(true);
+                    case 0x5: return INR_DCR(false);
                     case 0x6: return MVI();
+                    case 0x7: return BIT(zz_xxx_zzz());
                 }
                 break;
             }

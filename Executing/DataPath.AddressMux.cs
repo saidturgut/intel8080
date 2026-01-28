@@ -9,8 +9,8 @@ public partial class DataPath
         if(signals.AddressDriver is Register.NONE)
             return;
         
-        byte lowLatch = Registers[(byte)signals.AddressDriver].Get();
-        byte highLatch = Registers[(byte)signals.AddressDriver + 1].Get();
+        byte lowLatch = Reg(signals.AddressDriver).Get();
+        byte highLatch = Reg(signals.AddressDriver + 1).Get();
 
         AbusL.Set(lowLatch);
         AbusH.Set(highLatch);
@@ -27,20 +27,16 @@ public partial class DataPath
         {
             case IncAction.INC:
             {
-                Registers[(byte)signals.AddressDriver].Set((byte)(lowLatch + 1));
+                Reg(signals.AddressDriver).Set((byte)(lowLatch + 1));
                 if (lowLatch == 0xFF)
-                {
-                    Registers[(byte)signals.AddressDriver + 1].Set((byte)(highLatch + 1));
-                }
+                    Reg(signals.AddressDriver + 1).Set((byte)(highLatch + 1));
                 return;
             }
             case IncAction.DEC:
             {
-                Registers[(byte)signals.AddressDriver].Set((byte)(lowLatch - 1));
+                Reg(signals.AddressDriver).Set((byte)(lowLatch - 1));
                 if (lowLatch == 0x00)
-                {
-                    Registers[(byte)signals.AddressDriver + 1].Set((byte)(highLatch - 1));
-                }
+                    Reg(signals.AddressDriver + 1).Set((byte)(highLatch - 1));
                 return;
             }
         }

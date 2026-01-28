@@ -16,7 +16,7 @@ public partial class DataPath
                 Ram.Read(AbusL, AbusH, Dbus);
                 return;
             default:
-                Dbus.Set(Registers[(byte)signals.DataDriver].Get());
+                Dbus.Set(Reg(signals.DataDriver).Get());
                 return;
         }
     }
@@ -31,7 +31,7 @@ public partial class DataPath
                 Ram.Write(AbusL, AbusH, Dbus);
                 break;
             default:
-                Registers[(byte)signals.DataLatcher].Set(Dbus.Get());
+                Reg(signals.DataLatcher).Set(Dbus.Get());
                 break;
         }
     }

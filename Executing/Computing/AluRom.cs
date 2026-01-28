@@ -1,10 +1,12 @@
 namespace i8080_emulator.Executing.Computing;
+using Components;
 
 public struct AluInput
 {
     public byte A;
     public byte B;
     public byte C;
+    public Psw Psw;
 }
 
 public struct AluOutput

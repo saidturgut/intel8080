@@ -20,11 +20,13 @@ public partial class Alu
     
     private static readonly Func<AluInput, AluOutput>[] Operations =
     [
-        NONE, ADD ,SUB, AND, XOR, OR,
+        NONE, ADD, SUB, AND, XOR, OR, INC, DEC,
+        RLC, RRC, RAL, RAR, DAA, CMA, STC, CMC,
     ];
 }
 
 public enum Operation
 {
-    NONE, ADD, SUB, AND, XOR, OR,
+    NONE, ADD, SUB, AND, XOR, OR, INC, DEC,
+    RLC, RRC, RAL, RAR, DAA, CMA, STC, CMC,
 }

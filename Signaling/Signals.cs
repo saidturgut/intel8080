@@ -14,9 +14,10 @@ public struct SignalSet()
     public bool Index = false;
 }
 
-public struct AluAction(Operation operation, PswFlag flagMask, bool useCarry)
+public struct AluAction(Operation operation, Register latcher, PswFlag flagMask, bool useCarry)
 {
     public Operation Operation = operation;
+    public Register Latcher = latcher;
     public PswFlag FlagMask = flagMask;
     public bool UseCarry = useCarry;
 }

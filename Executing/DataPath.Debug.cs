@@ -5,15 +5,12 @@ public partial class DataPath
 {
     private void DebugInit()
     {
-        Registers[(byte)Register.HL_L].Set(0x20);
-        Registers[(byte)Register.A].Set(0xAA);
-        Registers[(byte)Register.B].Set(0xAA);
-        Registers[(byte)Register.PSW].Set(0x1);
+        Reg(Register.A).Set(0x9A);
     }
     
     public void Debug()
     {
-        ushort flags = Registers[(byte)Register.PSW].Get();
+        ushort flags = Reg(Register.PSW).Get();
         Console.WriteLine($"IR: {Hex(DebugAccess(Register.IR))}");
 
         Console.WriteLine($"PC: {Hex(Merge(DebugAccess(Register.PC_L), DebugAccess(Register.PC_H)))}");

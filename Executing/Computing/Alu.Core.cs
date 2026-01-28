@@ -24,7 +24,7 @@ public partial class Alu
         
         var result = input.A + (~input.B & 0xFF) + (1 - input.C);
         output.Result = (byte)result;
-
+        
         if ((input.A & 0xF) < (input.B & 0xF) + input.C)
             output.Flags |= (byte)PswFlag.Auxiliary;
         if (input.A < input.B + input.C)
@@ -45,4 +45,11 @@ public partial class Alu
         { Result = (byte)(input.A ^ input.B) };
     private static AluOutput OR(AluInput input) => new()
         { Result = (byte)(input.A | input.B) };
+
+    private static AluOutput INC(AluInput input) 
+    { input.A = 1; 
+        return ADD(input); }
+    private static AluOutput DEC(AluInput input)
+    { input.A = input.B; input.B = 1; 
+        return SUB(input); }
 }

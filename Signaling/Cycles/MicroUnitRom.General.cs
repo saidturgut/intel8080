@@ -75,4 +75,17 @@ public partial class MicroUnitRom
         DataLatcher = decoded.Pair[pairIndex],
         Index = true,
     };
+    
+    private static SignalSet PAIR_INC() => new()
+    {
+        AddressDriver = decoded.Pair[pairIndex],
+        IncAction = IncAction.INC,
+        Index = true,
+    };
+    private static SignalSet PAIR_DEC() => new()
+    {
+        AddressDriver = decoded.Pair[pairIndex],
+        IncAction = IncAction.DEC,
+        Index = true,
+    };
 }

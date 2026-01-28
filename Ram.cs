@@ -9,8 +9,22 @@ public class Ram
 
     private byte[] Rom =
     [
-        0xD6, 0x05,
-        0x76,
+        0x37,         // STC
+        0x3F,         // CMC
+
+        0x07,         // RLC
+        0x17,         // RAL
+        0x0F,         // RRC
+        0x1F,         // RAR
+
+        0x2F,         // CMA
+
+        0x37,         // STC
+        0x3F,         // CMC
+
+        0x27,         // DAA
+
+        0x76          // HLT
     ];
 
     private Dictionary<ushort, byte> Dump = new();
@@ -21,10 +35,6 @@ public class Ram
         LoadArray(0, File.ReadAllBytes("Test.bin"));*/
 
         LoadArray(0, Rom);
-        
-        LoadByte(0x64, 0x5F);
-        LoadByte(0x50, 0x1F);
-        LoadByte(0x20, 0x01);
         
         if (hexDump)
             HexDump.Run(Memory);
@@ -44,7 +54,6 @@ public class Ram
     public void Read(TriStateBus aBusL, TriStateBus aBusH, TriStateBus dBus)
     {
         dBus.Set(Memory[Merge(aBusL.Get(), aBusH.Get())]);
-        Console.WriteLine(Merge(aBusL.Get(), aBusH.Get()));
     }
     
     public void Write(TriStateBus aBusL, TriStateBus aBusH, TriStateBus dBus)
