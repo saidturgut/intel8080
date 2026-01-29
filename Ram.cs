@@ -9,7 +9,7 @@ public class Ram
 
     private byte[] Rom =
     [
-        0b00111001,
+        0b11111001,
         0x76
     ];
 
@@ -21,6 +21,12 @@ public class Ram
         LoadArray(0, File.ReadAllBytes("Test.bin"));*/
 
         LoadArray(0, Rom);
+        
+        LoadByte(0xA302, 0x40);
+        LoadByte(0xA303, 0x16);
+        LoadByte(0xA12, 0x76);
+        LoadByte(0x3B2, 0x76);
+        LoadByte(0x38, 0x76);
         
         if (hexDump)
             HexDump.Run(Memory);

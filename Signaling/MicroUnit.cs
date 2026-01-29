@@ -1,4 +1,5 @@
 namespace i8080_emulator.Signaling;
+using Executing.Components;
 using Decoding.Multiplexer;
 using Decoding;
 using Cycles;
@@ -27,9 +28,9 @@ public class MicroUnit : MicroUnitRom
         return Signals;
     }
 
-    public void Advance(byte ir)
+    public void Advance(byte ir, Psw psw)
     {
-        if (Signals.Index) pairIndex++;
+        if (Signals.Index) queueIndex++;
         
         if (currentCycle != decoded.MicroCycles.Count - 1)
         {
@@ -41,12 +42,12 @@ public class MicroUnit : MicroUnitRom
             {
                 case State.HALT: break;
                 case State.FETCH: throw new Exception("ILLEGAL");
-                case State.DECODE: decoded = Decoder.Decode(ir); break;
+                case State.DECODE: decoded = Decoder.Decode(ir, psw); break;
                 case State.EXECUTE: decoded = DecoderMux.FETCH(); break;
             }
             
             currentCycle = 0;
-            pairIndex = 0;
+            queueIndex = 0;
         }
     }
 }

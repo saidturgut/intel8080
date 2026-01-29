@@ -20,6 +20,8 @@ public partial class DataPath
         for (int i = 0; i < Registers.Length; i++)
             Registers[i] = new ClockedRegister();
         
+        Reg(Register.PSW).Set(0x2);
+        
         DebugInit();
     }
     

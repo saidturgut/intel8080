@@ -6,10 +6,10 @@ public partial class DataPath
     private void DebugInit()
     {
         Reg(Register.A).Set(0x9A);
-        Reg(Register.SP_L).Set(0xF);
-        Reg(Register.SP_H).Set(0xFF);
-        Reg(Register.HL_L).Set(0xFF);
-        Reg(Register.HL_H).Set(0xFF);
+        Reg(Register.SP_L).Set(0x2);
+        Reg(Register.SP_H).Set(0xA3);
+        Reg(Register.HL_L).Set(0xB2);
+        Reg(Register.HL_H).Set(0x3);
         Reg(Register.PSW).Set(0x1);
     }
     

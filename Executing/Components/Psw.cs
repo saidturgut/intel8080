@@ -17,4 +17,17 @@ public class Psw
         Parity = (psw & (byte)PswFlag.Parity) != 0;
         Carry = (psw & (byte)PswFlag.Carry) != 0;
     }
+
+    public bool Condition(byte type) => type switch
+    {
+        0b000 => !Zero,
+        0b001 => Zero,
+        0b010 => !Carry,
+        0b011 => Carry,
+        0b100 => !Parity,
+        0b101 => Parity,
+        0b110 => !Sign,
+        0b111 => Sign,
+        _ => false
+    };
 }

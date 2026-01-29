@@ -11,6 +11,7 @@ public partial class DataPath
         switch (signals.DataDriver)
         {
             case Register.NONE:
+                Dbus.Set(signals.CycleLatch);
                 return;
             case Register.RAM:
                 Ram.Read(AbusL, AbusH, Dbus);

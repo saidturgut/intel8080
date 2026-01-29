@@ -12,12 +12,20 @@ public class DecoderRom
         Register.HL_L, Register.HL_H, Register.RAM, Register.A,
     ];
 
-    protected static readonly Register[][] EncodedPairs =
+    protected static readonly Register[][] EncodedPairsSp =
     [
         [Register.C, Register.B],
         [Register.E, Register.D],
         [Register.HL_L, Register.HL_H],
         [Register.SP_L, Register.SP_H],
+    ];
+    protected static readonly Register[][] EncodedPairsPsw =
+    [
+        [Register.C, Register.B],
+        [Register.E, Register.D],
+        [Register.HL_L, Register.HL_H],
+        [Register.PSW, Register.A],
+        [Register.PC_L, Register.PC_H],
     ];
 
     protected static byte zz_zzz_xxx()

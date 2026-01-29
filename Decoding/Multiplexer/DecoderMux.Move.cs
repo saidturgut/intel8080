@@ -24,7 +24,7 @@ public partial class DecoderMux
     protected static Decoded LXI() => new()
     {
         DataDriver = Register.RAM,
-        Queue = EncodedPairs[zz_xxz_zzz()],
+        Queue = EncodedPairsSp[zz_xxz_zzz()],
         MicroCycles = [..MovePairImm]
     };
 
@@ -43,17 +43,17 @@ public partial class DecoderMux
 
     protected static Decoded LDAX_STAX(bool ldax) => new()
     {
-        AddressDriver = EncodedPairs[zz_xxz_zzz()][0],
+        AddressDriver = EncodedPairsSp[zz_xxz_zzz()][0],
         DataDriver = Register.RAM,
         DataLatcher = Register.A,
         MicroCycles = [ldax ? MicroCycle.MOVE_LOAD : MicroCycle.MOVE_STORE],
     };
-
     
     protected static Decoded LHLD_SHLD(bool lhld) => new()
     {
         AddressDriver = Register.WZ_L,
         DataDriver = Register.RAM,
+        IncAction = IncAction.INC,
         Queue = [Register.WZ_L, Register.WZ_H, Register.HL_L, Register.HL_H],
         MicroCycles =
         [
@@ -61,21 +61,8 @@ public partial class DecoderMux
             ..lhld ? MovePairLoad : MovePairStore,
         ]
     };
-
-    protected static Decoded XCHG() => new()
-    {
-        Queue = [Register.HL_L, Register.WZ_L, Register.E, Register.HL_L, Register.WZ_L, Register.E,
-            Register.HL_H, Register.WZ_L, Register.D, Register.HL_H, Register.WZ_L, Register.D],
-        MicroCycles = [..SwapPairs, ..SwapPairs],
-    };
     
     private static readonly MicroCycle[] MovePairImm = [MicroCycle.MOVE_PAIR_IMM, MicroCycle.MOVE_PAIR_IMM,];
     private static readonly MicroCycle[] MovePairLoad = [MicroCycle.MOVE_PAIR_LOAD, MicroCycle.MOVE_PAIR_LOAD,];
     private static readonly MicroCycle[] MovePairStore = [MicroCycle.MOVE_PAIR_STORE, MicroCycle.MOVE_PAIR_STORE,];
-    private static readonly MicroCycle[] SwapPairs =
-    [
-        MicroCycle.MOVE_PAIR_TO_TMP, MicroCycle.MOVE_TMP_TO_PAIR, 
-        MicroCycle.MOVE_PAIR_TO_TMP, MicroCycle.MOVE_TMP_TO_PAIR,
-        MicroCycle.MOVE_PAIR_TO_TMP, MicroCycle.MOVE_TMP_TO_PAIR,
-    ];
 }

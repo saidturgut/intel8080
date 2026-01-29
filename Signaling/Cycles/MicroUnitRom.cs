@@ -5,14 +5,15 @@ public partial class MicroUnitRom
 {
     protected static Decoded decoded;
 
-    protected static byte pairIndex;
+    protected static byte queueIndex;
     
     protected static readonly Func<SignalSet>[] MicroCycles =
     [
         IDLE, FETCH, DECODE, HALT, 
         MOVE_LOAD, MOVE_STORE, MOVE_IMM, 
         MOVE_PAIR_IMM, MOVE_PAIR_LOAD, MOVE_PAIR_STORE,
-        MOVE_PAIR_TO_TMP, MOVE_TMP_TO_PAIR,
+        MOVE_PAIR_TO_TMP, MOVE_TMP_TO_PAIR, 
+        MOVE_CYCLE_LATCH, MOVE_ZERO,
         EXECUTE_ALU, CLEAR_CARRY, INC_PAIR, DEC_PAIR
     ];
 }
@@ -23,6 +24,7 @@ public enum MicroCycle
     MOVE_LOAD, MOVE_STORE, MOVE_IMM, 
     MOVE_PAIR_IMM, MOVE_PAIR_LOAD, MOVE_PAIR_STORE,
     MOVE_PAIR_TO_TMP, MOVE_TMP_TO_PAIR,
+    MOVE_CYCLE_LATCH, MOVE_ZERO,
     EXECUTE_ALU, CLEAR_CARRY, INC_PAIR, DEC_PAIR
 }
 

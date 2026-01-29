@@ -10,6 +10,8 @@ public struct SignalSet()
     public IncAction IncAction = IncAction.NONE;
     public Register DataLatcher = Register.NONE;
     
+    public byte CycleLatch = 0;
+    
     public State State = State.EXECUTE;
     public bool Index = false;
 }

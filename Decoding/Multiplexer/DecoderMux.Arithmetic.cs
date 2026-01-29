@@ -22,31 +22,6 @@ public partial class DecoderMux
         
         MicroCycles = [native ? MicroCycle.MOVE_LOAD : MicroCycle.MOVE_IMM, MicroCycle.EXECUTE_ALU],
     };
-
-    protected static Decoded DAD() => new()
-    {
-        Queue = [Register.WZ_L, EncodedPairs[zz_xxz_zzz()][0], Register.HL_L, Register.HL_L, 
-            EncodedPairs[zz_xxz_zzz()][1], Register.HL_H, Register.HL_H, Register.WZ_L],
-
-        DataDriver = Register.A,
-        
-        AluAction = new AluAction
-        {
-            Operation = Operation.ADD,
-            FlagMask = PswFlag.Carry,
-            UseCarry = true,
-        },
-        
-        MicroCycles = 
-        [
-            MicroCycle.CLEAR_CARRY, MicroCycle.MOVE_PAIR_LOAD, // Z <- A, C = 0
-            MicroCycle.MOVE_PAIR_TO_TMP, MicroCycle.MOVE_PAIR_STORE, // TMP <- LOW, A <- L
-            MicroCycle.EXECUTE_ALU, MicroCycle.MOVE_PAIR_LOAD, // TMP <- TMP + A, L <- TMP
-            MicroCycle.MOVE_PAIR_TO_TMP, MicroCycle.MOVE_PAIR_STORE, // TMP <- HIGH, A <- H
-            MicroCycle.EXECUTE_ALU, MicroCycle.MOVE_PAIR_LOAD, // TMP <- TMP + A, H <- TMP
-            MicroCycle.MOVE_PAIR_STORE, // A <- Z
-        ],
-    };
     
     protected static Decoded INR_DCR(bool inr) => new()
     {
@@ -69,35 +44,10 @@ public partial class DecoderMux
 
     protected static Decoded INX_DCX(bool inx) => new()
     {
-        Queue = EncodedPairs[zz_xxz_zzz()],
+        Queue = EncodedPairsSp[zz_xxz_zzz()],
         MicroCycles = [inx ? MicroCycle.INC_PAIR : MicroCycle.DEC_PAIR],
     };
-
-    protected static Decoded BIT(byte type) => new()
-    {
-        AluAction = new AluAction
-        {
-            Operation = EncodedBitOperations[type],
-            FlagMask = type switch
-            {
-                0x4 => FlagMasks[(byte)FlagMask.SZAPC], // DAA
-                0x5 => PswFlag.None, // CMA
-                _ => PswFlag.Carry
-            },
-            UseCarry = true,
-        },
-
-        MicroCycles = [MicroCycle.EXECUTE_ALU]
-    };
     
-    private static readonly Operation[] EncodedBitOperations =
-    [
-        Operation.RLC, Operation.RRC,
-        Operation.RAL, Operation.RAR,
-        Operation.DAA, Operation.CMA,
-        Operation.STC, Operation.CMC,
-    ];
-
     private static readonly Operation[] EncodedCoreOperations =
     [
         Operation.ADD, Operation.ADD,

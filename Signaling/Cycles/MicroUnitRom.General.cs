@@ -23,9 +23,10 @@ public partial class MicroUnitRom
     {
         AluAction = new AluAction
         {
-            Operation = Operation.ADD, 
-            FlagMask = PswFlag.Carry
-        }
+            Operation = Operation.OR, 
+            FlagMask = PswFlag.Carry,
+            LatchPermit = false,
+        },
     };
 
     private static SignalSet MOVE_IMM() => new()
@@ -53,48 +54,57 @@ public partial class MicroUnitRom
         AddressDriver = Register.PC_L,
         IncAction = IncAction.INC,
         DataDriver = Register.RAM,
-        DataLatcher = decoded.Queue[pairIndex],
+        DataLatcher = decoded.Queue[queueIndex],
         Index = true,
     };
     private static SignalSet MOVE_PAIR_LOAD() => new()
     {
         AddressDriver = decoded.AddressDriver,
-        IncAction = IncAction.INC,
+        IncAction = decoded.IncAction,
         DataDriver = decoded.DataDriver,
-        DataLatcher = decoded.Queue[pairIndex],
+        DataLatcher = decoded.Queue[queueIndex],
         Index = true,
     };
     private static SignalSet MOVE_PAIR_STORE() => new()
     {
         AddressDriver = decoded.AddressDriver,
-        IncAction = IncAction.INC,
-        DataDriver = decoded.Queue[pairIndex],
+        IncAction = decoded.IncAction,
+        DataDriver = decoded.Queue[queueIndex],
         DataLatcher = decoded.DataDriver,
         Index = true,
     };
     
     private static SignalSet MOVE_PAIR_TO_TMP() => new()
     {
-        DataDriver = decoded.Queue[pairIndex],
+        DataDriver = decoded.Queue[queueIndex],
         DataLatcher = Register.TMP,
         Index = true,
     };
     private static SignalSet MOVE_TMP_TO_PAIR() => new()
     {
         DataDriver = Register.TMP,
-        DataLatcher = decoded.Queue[pairIndex],
+        DataLatcher = decoded.Queue[queueIndex],
         Index = true,
     };
+
+    private static SignalSet MOVE_CYCLE_LATCH() => new()
+    {
+        CycleLatch = decoded.CycleLatch,
+        DataLatcher = decoded.Queue[queueIndex],
+        Index = true,
+    };
+    private static SignalSet MOVE_ZERO() => new()
+        { DataLatcher = decoded.DataLatcher, };
     
     private static SignalSet INC_PAIR() => new()
     {
-        AddressDriver = decoded.Queue[pairIndex],
+        AddressDriver = decoded.Queue[queueIndex],
         IncAction = IncAction.INC,
         Index = true,
     };
     private static SignalSet DEC_PAIR() => new()
     {
-        AddressDriver = decoded.Queue[pairIndex],
+        AddressDriver = decoded.Queue[queueIndex],
         IncAction = IncAction.DEC,
         Index = true,
     };

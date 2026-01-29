@@ -35,6 +35,6 @@ public class Cpu
         DataPath.Commit();
         DataPath.Debug();
         
-        MicroUnit.Advance(DataPath.GetIr());
+        MicroUnit.Advance(DataPath.GetIr(), DataPath.Psw);
     }
 }

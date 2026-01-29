@@ -1,10 +1,12 @@
+using i8080_emulator.Executing.Components;
+
 namespace i8080_emulator.Decoding;
 using Signaling.Cycles;
 using Multiplexer;
 
 public class Decoder : DecoderMux
 {
-    public Decoded Decode(byte ir)
+    public Decoded Decode(byte ir, Psw psw)
     {
         opcode = ir;
         
@@ -46,11 +48,28 @@ public class Decoder : DecoderMux
             {
                 switch (opcode)
                 {
+                    case 0xC3: return JMP(Cft.JMP);
+                    case 0xCD: return PUSH(Cft.CALL);
+                    case 0xC9: return POP(Cft.RET);
+                    //case 0xDB: return IN();
+                    //case 0xD3: return OUT();
+                    case 0xE3: return XTHL();
+                    case 0xE9: return PCHL();
                     case 0xEB: return XCHG();
+                    case 0xF9: return SPHL();
+                }
+                switch (zz_zzx_xxx())
+                {
+                    case 0x1: return POP(Cft.POP);
+                    case 0x5: return PUSH(Cft.PUSH);
                 }
                 switch (zz_zzz_xxx())
                 {
+                    case 0x2: return COND(psw, JMP, Cft.JMP); 
+                    case 0x4: return COND(psw, PUSH, Cft.CALL);
+                    case 0x0: return COND(psw, POP, Cft.RET);
                     case 0x6: return ALU(false, zz_xxx_zzz());
+                    case 0x7: return PUSH(Cft.RST);
                 }
                 break;
             }
@@ -58,4 +77,7 @@ public class Decoder : DecoderMux
 
         throw new Exception($"ILLEGAL OPCODE \"{opcode}\"");
     }
+
+    private static Decoded COND(Psw psw, Func<Cft, Decoded> method, Cft type) =>
+        psw.Condition(zz_xxx_zzz()) ? method(type) : IDLE();
 }

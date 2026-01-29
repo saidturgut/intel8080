@@ -8,7 +8,7 @@ public partial class DataPath
 {
     private readonly Alu Alu = new();
     
-    private readonly Psw Psw = new();
+    public readonly Psw Psw = new();
     
     public void AluAction()
     {
