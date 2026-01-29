@@ -1,6 +1,6 @@
 namespace i8080_emulator.Decoding.Multiplexer;
 using Executing.Computing;
-using Signaling.Cycles;
+using Signaling.Multiplexer;
 using Signaling;
 
 // 00b INSTRUCTIONS
@@ -20,7 +20,7 @@ public partial class DecoderMux
             UseCarry = true,
         },
 
-        MicroCycles = [MicroCycle.EXECUTE_ALU]
+        MicroCycles = [MicroCycle.COMPUTE_ALU]
     };
     
     protected static Decoded DAD() => new()
@@ -39,12 +39,12 @@ public partial class DecoderMux
         
         MicroCycles = 
         [
-            MicroCycle.CLEAR_CARRY, MicroCycle.MOVE_PAIR_LOAD, // Z <- A, C = 0
-            MicroCycle.MOVE_PAIR_TO_TMP, MicroCycle.MOVE_PAIR_STORE, // TMP <- LOW, A <- L
-            MicroCycle.EXECUTE_ALU, MicroCycle.MOVE_PAIR_LOAD, // TMP <- TMP + A, L <- TMP
-            MicroCycle.MOVE_PAIR_TO_TMP, MicroCycle.MOVE_PAIR_STORE, // TMP <- HIGH, A <- H
-            MicroCycle.EXECUTE_ALU, MicroCycle.MOVE_PAIR_LOAD, // TMP <- TMP + A, H <- TMP
-            MicroCycle.MOVE_PAIR_STORE, // A <- Z
+            MicroCycle.ZERO_CARRY, MicroCycle.STORE_PAIR, // Z <- A, C = 0
+            MicroCycle.STORE_PAIR_TMP, MicroCycle.LOAD_PAIR, // TMP <- LOW, A <- L
+            MicroCycle.COMPUTE_ALU, MicroCycle.STORE_PAIR, // TMP <- TMP + A, L <- TMP
+            MicroCycle.STORE_PAIR_TMP, MicroCycle.LOAD_PAIR, // TMP <- HIGH, A <- H
+            MicroCycle.COMPUTE_ALU, MicroCycle.STORE_PAIR, // TMP <- TMP + A, H <- TMP
+            MicroCycle.LOAD_PAIR, // A <- Z
         ],
     };
     

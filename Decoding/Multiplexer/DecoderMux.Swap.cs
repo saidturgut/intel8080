@@ -1,5 +1,5 @@
 namespace i8080_emulator.Decoding.Multiplexer;
-using Signaling.Cycles;
+using Signaling.Multiplexer;
 using Signaling;
 
 // 11b INSTRUCTIONS
@@ -21,9 +21,9 @@ public partial class DecoderMux
         
         MicroCycles = 
         [
-            MicroCycle.MOVE_LOAD, MicroCycle.MOVE_PAIR_STORE, MicroCycle.MOVE_TMP_TO_PAIR,
+            MicroCycle.STORE_REG, MicroCycle.LOAD_PAIR, MicroCycle.LOAD_PAIR_TMP,
             MicroCycle.INC_PAIR, 
-            MicroCycle.MOVE_LOAD, MicroCycle.MOVE_PAIR_STORE, MicroCycle.MOVE_TMP_TO_PAIR
+            MicroCycle.STORE_REG, MicroCycle.LOAD_PAIR, MicroCycle.LOAD_PAIR_TMP
         ]
     };
 
@@ -41,7 +41,7 @@ public partial class DecoderMux
 
     private static readonly MicroCycle[] SwapPairs =
     [
-        MicroCycle.MOVE_PAIR_TO_TMP, MicroCycle.MOVE_TMP_TO_PAIR,
-        MicroCycle.MOVE_PAIR_TO_TMP, MicroCycle.MOVE_TMP_TO_PAIR,
+        MicroCycle.STORE_PAIR_TMP, MicroCycle.LOAD_PAIR_TMP,
+        MicroCycle.STORE_PAIR_TMP, MicroCycle.LOAD_PAIR_TMP,
     ];
 }

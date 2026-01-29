@@ -1,5 +1,5 @@
 namespace i8080_emulator.Decoding;
-using Signaling.Cycles;
+using Signaling.Multiplexer;
 using Signaling;
 
 public class DecoderRom

@@ -1,6 +1,6 @@
 namespace i8080_emulator.Decoding.Multiplexer;
 using Executing.Computing;
-using Signaling.Cycles;
+using Signaling.Multiplexer;
 using Signaling;
 
 // 10b AND 11b INSTRUCTIONS
@@ -20,7 +20,7 @@ public partial class DecoderMux
             LatchPermit = type != 0x7,
         },
         
-        MicroCycles = [native ? MicroCycle.MOVE_LOAD : MicroCycle.MOVE_IMM, MicroCycle.EXECUTE_ALU],
+        MicroCycles = [native ? MicroCycle.STORE_REG : MicroCycle.IMM_TMP, MicroCycle.COMPUTE_ALU],
     };
     
     protected static Decoded INR_DCR(bool inr) => new()
@@ -38,8 +38,8 @@ public partial class DecoderMux
             UseCarry = false,
         },
             
-        MicroCycles = [MicroCycle.MOVE_PAIR_LOAD, MicroCycle.MOVE_STORE, MicroCycle.EXECUTE_ALU, 
-            MicroCycle.MOVE_LOAD, MicroCycle.MOVE_PAIR_STORE],
+        MicroCycles = [MicroCycle.STORE_PAIR, MicroCycle.LOAD_REG, MicroCycle.COMPUTE_ALU, 
+            MicroCycle.STORE_REG, MicroCycle.LOAD_PAIR],
     };
 
     protected static Decoded INX_DCX(bool inx) => new()

@@ -1,16 +1,18 @@
 namespace i8080_emulator.Signaling;
 using Executing.Computing;
-using Cycles;
+using Executing;
+using Multiplexer;
 
 public struct SignalSet()
 {
     public Register AddressDriver = Register.NONE;
+    public IncAction IncAction = IncAction.NONE;
     public Register DataDriver = Register.NONE;
     public AluAction? AluAction = null;
-    public IncAction IncAction = IncAction.NONE;
+    public IoAction IoAction = IoAction.NONE;
     public Register DataLatcher = Register.NONE;
     
-    public byte CycleLatch = 0;
+    public byte EncodeLatch = 0;
     
     public State State = State.EXECUTE;
     public bool Index = false;

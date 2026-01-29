@@ -1,6 +1,5 @@
-using i8080_emulator.Executing.Components;
-
 namespace i8080_emulator.Executing;
+using Components;
 using Computing;
 using Signaling;
 

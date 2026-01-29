@@ -1,10 +1,10 @@
 namespace i8080_emulator.Signaling;
 using Executing.Components;
 using Decoding.Multiplexer;
+using Multiplexer;
 using Decoding;
-using Cycles;
 
-public class MicroUnit : MicroUnitRom
+public class MicroUnit : MicroUnitMux
 {
     private readonly Decoder Decoder = new();
 

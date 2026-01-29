@@ -1,5 +1,5 @@
 namespace i8080_emulator.Decoding.Multiplexer;
-using Signaling.Cycles;
+using Signaling.Multiplexer;
 using Signaling;
 
 // 11b INSTRUCTIONS
@@ -11,7 +11,7 @@ public partial class DecoderMux
         DataDriver = Register.RAM,
         DataLatcher = Register.PC_H,
         
-        CycleLatch = (byte)(zz_xxx_zzz() << 3), // OPERAND * 8
+        EncodeLatch = (byte)(zz_xxx_zzz() << 3), // OPERAND * 8
         
         Queue = 
         [
@@ -25,7 +25,7 @@ public partial class DecoderMux
             }
         ],
         
-        MicroCycles = [MicroCycle.DEC_PAIR, MicroCycle.MOVE_PAIR_STORE, MicroCycle.DEC_PAIR, MicroCycle.MOVE_PAIR_STORE,
+        MicroCycles = [MicroCycle.DEC_PAIR, MicroCycle.LOAD_PAIR, MicroCycle.DEC_PAIR, MicroCycle.LOAD_PAIR,
             ..type switch
             {
                 Cft.CALL => JMP(Cft.JMP).MicroCycles,
@@ -43,7 +43,7 @@ public partial class DecoderMux
     private static Decoded RST() => new()
     {
         Queue = [Register.PC_L],
-        MicroCycles = [MicroCycle.MOVE_CYCLE_LATCH, MicroCycle.MOVE_ZERO]
+        MicroCycles = [MicroCycle.LOAD_PAIR_ENCODE, MicroCycle.ZERO_REG]
     };
     
     protected static Decoded POP(Cft type) => new()

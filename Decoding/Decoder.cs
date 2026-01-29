@@ -1,7 +1,8 @@
+using i8080_emulator.Executing;
 using i8080_emulator.Executing.Components;
 
 namespace i8080_emulator.Decoding;
-using Signaling.Cycles;
+using Signaling.Multiplexer;
 using Multiplexer;
 
 public class Decoder : DecoderMux
@@ -51,8 +52,8 @@ public class Decoder : DecoderMux
                     case 0xC3: return JMP(Cft.JMP);
                     case 0xCD: return PUSH(Cft.CALL);
                     case 0xC9: return POP(Cft.RET);
-                    //case 0xDB: return IN();
-                    //case 0xD3: return OUT();
+                    case 0xDB: return IO(IoAction.INPUT);
+                    case 0xD3: return IO(IoAction.OUTPUT);
                     case 0xE3: return XTHL();
                     case 0xE9: return PCHL();
                     case 0xEB: return XCHG();

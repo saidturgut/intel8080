@@ -1,5 +1,5 @@
 namespace i8080_emulator;
-using Signaling.Cycles;
+using Signaling.Multiplexer;
 using Signaling;
 using Executing;
 
@@ -30,6 +30,7 @@ public class Cpu
         DataPath.AddressDrive();
         DataPath.DataDrive();
         DataPath.AluAction();
+        DataPath.IoControl();
         DataPath.DataLatch();
 
         DataPath.Commit();

@@ -1,6 +1,7 @@
 namespace i8080_emulator.Decoding.Multiplexer;
-using Signaling.Cycles;
+using Signaling.Multiplexer;
 using Signaling;
+using Executing;
 
 public partial class DecoderMux : DecoderRom
 {
@@ -34,5 +35,15 @@ public partial class DecoderMux : DecoderRom
     {
         AddressDriver = Register.PC_L,
         MicroCycles = [MicroCycle.FETCH, MicroCycle.DECODE],
+    };
+
+    protected static Decoded IO(IoAction ioAction) => new()
+    {
+        AddressDriver = Register.TMP,
+        DataDriver = ioAction is IoAction.OUTPUT ? Register.A : Register.NONE,
+        DataLatcher = ioAction is IoAction.INPUT ? Register.A : Register.NONE,
+        IoAction = ioAction,
+        
+        MicroCycles = [MicroCycle.IMM_TMP, MicroCycle.IO]
     };
 }
