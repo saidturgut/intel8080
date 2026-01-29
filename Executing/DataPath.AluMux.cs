@@ -19,13 +19,14 @@ public partial class DataPath
         
         AluOutput output = Alu.Compute(new AluInput
         {
-            A = Reg(Register.A).Get(),
-            B = Reg(Register.TMP).Get(),
+            A = Reg(Register.A).Get(), // SOURCE
+            B = Reg(Register.TMP).Get(), // OPERAND
             C = (byte)(Psw.Carry && action.UseCarry ? 1 : 0),
             Psw = Psw,
         }, action.Operation);
 
-        Reg(action.Latcher).Set(output.Result);
+        if (action.LatchPermit)
+            Reg(Register.A).Set(output.Result); // DESTINATION
 
         // SET PROCESS STATUS WORD
         byte newPsw = (byte)

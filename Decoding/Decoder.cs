@@ -29,6 +29,7 @@ public class Decoder : DecoderMux
                     case 0xA: return LDAX_STAX(true);
                     case 0x3: return INX_DCX(true);
                     case 0xB: return INX_DCX(false);
+                    case 0x9: return DAD();
                 }
                 switch (zz_zzz_xxx())
                 {
@@ -40,7 +41,7 @@ public class Decoder : DecoderMux
                 break;
             }
             case 0x1: return MOV();
-            case 0x2: return ALU(true);
+            case 0x2: return ALU(true, zz_xxx_zzz());
             case 0x3:
             {
                 switch (opcode)
@@ -49,7 +50,7 @@ public class Decoder : DecoderMux
                 }
                 switch (zz_zzz_xxx())
                 {
-                    case 0x6: return ALU(false);
+                    case 0x6: return ALU(false, zz_xxx_zzz());
                 }
                 break;
             }

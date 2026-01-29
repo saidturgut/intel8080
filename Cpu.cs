@@ -1,6 +1,7 @@
 namespace i8080_emulator;
-using Executing;
+using Signaling.Cycles;
 using Signaling;
+using Executing;
 
 public class Cpu
 {    

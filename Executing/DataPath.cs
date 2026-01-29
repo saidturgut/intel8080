@@ -3,7 +3,7 @@ using Signaling;
 using Components;
 using Computing;
 
-public partial class DataPath : DataPathRom
+public partial class DataPath
 {
     private readonly Ram Ram = new ();
     

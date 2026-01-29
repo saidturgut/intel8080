@@ -10,7 +10,7 @@ public struct Decoded()
     public AluAction? AluAction = null;
     public Register DataLatcher = Register.NONE;
     
-    public Register[] Pair = [];
+    public Register[] Queue = [];
     
     public List<MicroCycle> MicroCycles = [];
 }

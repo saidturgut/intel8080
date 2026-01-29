@@ -6,7 +6,7 @@ public partial class DecoderMux : DecoderRom
 {
     protected static readonly Dictionary<byte, MicroCycle> FixedOpcodes = new()
     {
-        { 0x00, MicroCycle.EMPTY },
+        { 0x00, MicroCycle.IDLE },
         { 0x76, MicroCycle.HALT },
     };
     

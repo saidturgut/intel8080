@@ -1,6 +1,6 @@
 namespace i8080_emulator.Executing.Components;
 
-public class ClockedRegister()
+public class ClockedRegister
 {
     private byte commit;
     private byte value;

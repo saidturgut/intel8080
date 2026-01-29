@@ -4,7 +4,7 @@ using Signaling;
 
 public partial class DataPath
 {
-    private readonly ClockedRegister[] Registers = new ClockedRegister[16];
+    private readonly ClockedRegister[] Registers = new ClockedRegister[17];
     
     public void DataDrive()
     {

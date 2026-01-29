@@ -27,8 +27,6 @@ public partial class Alu
     
     private static AluOutput DAA(AluInput input)
     {
-        AluOutput output = new();
-
         byte fixer = 0;
 
         if ((input.A & 0x0F) > 9 || Psw.Auxiliary)
@@ -38,7 +36,9 @@ public partial class Alu
             fixer |= 0x60;
 
         var result = input.A + fixer;
-        output.Result = (byte)result;
+
+        AluOutput output = new()
+            { Result = (byte)result };
 
         if ((fixer & 0x06) != 0)
             output.Flags |= (byte)PswFlag.Auxiliary;
@@ -49,11 +49,17 @@ public partial class Alu
     }
     
     private static AluOutput CMA(AluInput input) => new()
-        { Result = (byte)~input.A };
+    {
+        Result = (byte)~input.A 
+    };
     private static AluOutput STC(AluInput input) => new()
-        { Result = input.A, Flags = 0xFF };
+    {
+        Result = input.A, Flags = 0xFF
+    };
     private static AluOutput CMC(AluInput input) => new()
-        { Result = input.A, Flags = (byte)(Psw.Carry ? 0x00 : 0xFF), };
+    {
+        Result = input.A, Flags = (byte)(Psw.Carry ? 0x00 : 0xFF), 
+    };
     
     private static byte RotateCarry(byte bit) => (byte)((byte)PswFlag.Carry & bit);
     private static byte Bit7(byte A) => (byte)((A >> 7) & 1);

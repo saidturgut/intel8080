@@ -1,13 +1,7 @@
-using i8080_emulator.Decoding.Multiplexer;
-
 namespace i8080_emulator.Signaling;
+using Decoding.Multiplexer;
 using Decoding;
 using Cycles;
-
-public enum State
-{
-    FETCH, DECODE, EXECUTE, HALT
-}
 
 public class MicroUnit : MicroUnitRom
 {

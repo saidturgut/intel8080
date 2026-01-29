@@ -1,6 +1,6 @@
 namespace i8080_emulator.Signaling;
 using Executing.Computing;
-using Executing;
+using Cycles;
 
 public struct SignalSet()
 {
@@ -14,12 +14,12 @@ public struct SignalSet()
     public bool Index = false;
 }
 
-public struct AluAction(Operation operation, Register latcher, PswFlag flagMask, bool useCarry)
+public struct AluAction()
 {
-    public Operation Operation = operation;
-    public Register Latcher = latcher;
-    public PswFlag FlagMask = flagMask;
-    public bool UseCarry = useCarry;
+    public Operation Operation = Operation.NONE;
+    public PswFlag FlagMask = PswFlag.None;
+    public bool UseCarry = false;
+    public bool LatchPermit = false;
 }
 
 public enum IncAction
@@ -29,7 +29,6 @@ public enum IncAction
 
 public enum Register
 {
-    NONE = -1,
     PC_L, PC_H,
     SP_L, SP_H,
     HL_L, HL_H,
@@ -37,5 +36,5 @@ public enum Register
     
     C, B, E, D,
     A, IR ,TMP, PSW,
-    RAM,
+    NONE, RAM, 
 }

@@ -5,26 +5,12 @@ using Executing;
 
 public class Ram
 {
-    private readonly byte[] Memory = new byte[0x150];
+    private readonly byte[] Memory = new byte[0x10000];
 
     private byte[] Rom =
     [
-        0x37,         // STC
-        0x3F,         // CMC
-
-        0x07,         // RLC
-        0x17,         // RAL
-        0x0F,         // RRC
-        0x1F,         // RAR
-
-        0x2F,         // CMA
-
-        0x37,         // STC
-        0x3F,         // CMC
-
-        0x27,         // DAA
-
-        0x76          // HLT
+        0b00111001,
+        0x76
     ];
 
     private Dictionary<ushort, byte> Dump = new();

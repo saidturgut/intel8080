@@ -6,11 +6,11 @@ public partial class Alu
 
     private static AluOutput ADD(AluInput input)
     {
-        AluOutput output = new();
-        
         var result = input.A + input.B + input.C;
-        output.Result = (byte)result;
-     
+
+        AluOutput output = new()
+            { Result = (byte)result };
+
         if ((input.A & 0xF) + (input.B & 0xF) + input.C > 0xF) 
             output.Flags |= (byte)PswFlag.Auxiliary;
         if (result > 0xFF) 
@@ -20,11 +20,11 @@ public partial class Alu
     }
     private static AluOutput SUB(AluInput input)
     {
-        AluOutput output = new();
-        
         var result = input.A + (~input.B & 0xFF) + (1 - input.C);
-        output.Result = (byte)result;
-        
+
+        AluOutput output = new()
+            { Result = (byte)result };
+
         if ((input.A & 0xF) < (input.B & 0xF) + input.C)
             output.Flags |= (byte)PswFlag.Auxiliary;
         if (input.A < input.B + input.C)
@@ -42,14 +42,20 @@ public partial class Alu
         return output;
     }
     private static AluOutput XOR(AluInput input) => new()
-        { Result = (byte)(input.A ^ input.B) };
+    {
+        Result = (byte)(input.A ^ input.B) 
+    };
     private static AluOutput OR(AluInput input) => new()
-        { Result = (byte)(input.A | input.B) };
+    {
+        Result = (byte)(input.A | input.B)
+    };
 
     private static AluOutput INC(AluInput input) 
-    { input.A = 1; 
-        return ADD(input); }
+    { 
+        input.B = 1; return ADD(input); 
+    }
     private static AluOutput DEC(AluInput input)
-    { input.A = input.B; input.B = 1; 
-        return SUB(input); }
+    { 
+        input.B = 1; return SUB(input); 
+    }
 }

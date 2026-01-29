@@ -6,11 +6,16 @@ public partial class DataPath
     private void DebugInit()
     {
         Reg(Register.A).Set(0x9A);
+        Reg(Register.SP_L).Set(0xF);
+        Reg(Register.SP_H).Set(0xFF);
+        Reg(Register.HL_L).Set(0xFF);
+        Reg(Register.HL_H).Set(0xFF);
+        Reg(Register.PSW).Set(0x1);
     }
     
     public void Debug()
     {
-        ushort flags = Reg(Register.PSW).Get();
+        ushort flags = DebugAccess(Register.PSW);
         Console.WriteLine($"IR: {Hex(DebugAccess(Register.IR))}");
 
         Console.WriteLine($"PC: {Hex(Merge(DebugAccess(Register.PC_L), DebugAccess(Register.PC_H)))}");
@@ -27,6 +32,9 @@ public partial class DataPath
         
         Console.WriteLine($"S Z A P C");
         Console.WriteLine($"{(flags >> 7) & 1} {(flags >> 6) & 1} {(flags >> 4) & 1} {(flags >> 2) & 1} {(flags >> 0) & 1}");
+
+        if (DebugAccess(Register.NONE) != 0)
+            throw new Exception("CORRUPTED \"NONE\" REGISTER!!");
         
         Console.WriteLine("---------------");
         

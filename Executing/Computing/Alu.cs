@@ -10,9 +10,7 @@ public partial class Alu
         if (output.Result == 0) output.Flags |= (byte)PswFlag.Zero;
         
         byte ones = 0;
-        for (byte i = 0; i < 8; i++) 
-            ones += (byte)((output.Result >> i) & 1);
-        
+        for (byte i = 0; i < 8; i++) ones += (byte)((output.Result >> i) & 1);
         if (ones % 2 == 0) output.Flags |= (byte)PswFlag.Parity;
         
         return output;
