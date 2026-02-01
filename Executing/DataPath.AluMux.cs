@@ -1,4 +1,4 @@
-namespace i8080_emulator.Executing;
+namespace intel8080.Executing;
 using Components;
 using Computing;
 using Signaling;
@@ -9,31 +9,23 @@ public partial class DataPath
     
     public readonly Psw Psw = new();
     
-    public void AluAction()
+    private void AluCompute()
     {
-        if(signals.AluAction is null)
-            return;
-
-        AluAction action = signals.AluAction.Value;
-        
         AluOutput output = Alu.Compute(new AluInput
         {
-            A = Reg(Register.A).Get(), // SOURCE
+            A = Reg(signals.Source).Get(), // SOURCE
             B = Reg(Register.TMP).Get(), // OPERAND
-            C = (byte)(Psw.Carry && action.UseCarry ? 1 : 0),
+            C = (byte)(Psw.Carry && signals.AluAction.UseCarry ? 1 : 0),
             Psw = Psw,
-        }, action.Operation);
-
-        if (action.LatchPermit)
-            Reg(Register.A).Set(output.Result); // DESTINATION
-
+        }, signals.AluAction.Operation);
+        
+        Reg(Register.TMP).Set(output.Result);
+        
         // SET PROCESS STATUS WORD
         byte newPsw = (byte)
-            ((Reg(Register.PSW).Get() & (byte)~action.FlagMask) | (output.Flags & (byte)action.FlagMask));
-        
-        Psw.Update(newPsw);
+            ((Reg(Register.PSW).Get() & (byte)~signals.AluAction.FlagMask) 
+             | (output.Flags & (byte)signals.AluAction.FlagMask));
         
         Reg(Register.PSW).Set(newPsw);
-        
     }
 }

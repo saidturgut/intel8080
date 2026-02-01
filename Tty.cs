@@ -1,8 +1,14 @@
-namespace i8080_emulator;
+namespace intel8080;
 
 public class Tty
 {
     private readonly Queue<byte> inputBuffer = new();
+
+    public void Init()
+    {
+        //inputBuffer.Enqueue((byte)'R');
+        //inputBuffer.Enqueue((byte)'O');
+    }
     
     public void HostInput()
     {

@@ -1,5 +1,3 @@
-namespace i8080_emulator.Executing.Computing;
-
 public partial class Alu
 {
     private static AluOutput NONE(AluInput input) => new();
@@ -12,9 +10,7 @@ public partial class Alu
             { Result = (byte)result };
 
         if ((input.A & 0xF) + (input.B & 0xF) + input.C > 0xF) 
-            output.Flags |= (byte)PswFlag.Auxiliary;
         if (result > 0xFF) 
-            output.Flags |= (byte)PswFlag.Carry;
         
         return output;
     }
@@ -26,9 +22,7 @@ public partial class Alu
             { Result = (byte)result };
 
         if ((input.A & 0xF) < (input.B & 0xF) + input.C)
-            output.Flags |= (byte)PswFlag.Auxiliary;
         if (input.A < input.B + input.C)
-            output.Flags |= (byte)PswFlag.Carry;
         
         return output;
     }
@@ -38,7 +32,6 @@ public partial class Alu
         AluOutput output = new()
             { Result = (byte)(input.A & input.B), };
         
-        output.Flags |= (byte)PswFlag.Auxiliary;
         return output;
     }
     private static AluOutput XOR(AluInput input) => new()

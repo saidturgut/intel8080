@@ -1,4 +1,4 @@
-namespace i8080_emulator.Executing.Components;
+namespace intel8080.Executing.Components;
 using Computing;
 
 public class Psw
@@ -11,23 +11,28 @@ public class Psw
 
     public void Update(byte psw)
     {
-        Sign = (psw & (byte)PswFlag.Sign) != 0;
-        Zero = (psw & (byte)PswFlag.Zero) != 0;
-        Auxiliary = (psw & (byte)PswFlag.Auxiliary) != 0;
-        Parity = (psw & (byte)PswFlag.Parity) != 0;
-        Carry = (psw & (byte)PswFlag.Carry) != 0;
+        Sign = (psw & (byte)Flag.Sign) != 0;
+        Zero = (psw & (byte)Flag.Zero) != 0;
+        Auxiliary = (psw & (byte)Flag.Auxiliary) != 0;
+        Parity = (psw & (byte)Flag.Parity) != 0;
+        Carry = (psw & (byte)Flag.Carry) != 0;
     }
 
-    public bool Condition(byte type) => type switch
+    public bool CheckCondition(Condition condition) => condition switch
     {
-        0b000 => !Zero,
-        0b001 => Zero,
-        0b010 => !Carry,
-        0b011 => Carry,
-        0b100 => !Parity,
-        0b101 => Parity,
-        0b110 => !Sign,
-        0b111 => Sign,
+        Condition.NZ => !Zero,
+        Condition.Z => Zero,
+        Condition.NC => !Carry,
+        Condition.C => Carry,
+        Condition.PO => !Parity,
+        Condition.PE => Parity,
+        Condition.P => !Sign,
+        Condition.M => Sign,
         _ => false
     };
+}
+
+public enum Condition
+{
+    NZ, Z, NC, C, PO, PE, P, M
 }

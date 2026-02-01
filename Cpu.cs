@@ -1,48 +1,40 @@
-namespace i8080_emulator;
-using Signaling.Multiplexer;
-using Signaling;
+namespace intel8080;
 using Executing;
+using Signaling;
 
 public class Cpu
-{    
-    private readonly DataPath DataPath = new ();
-    private readonly MicroUnit MicroUnit = new ();
+{
+    private readonly DataPath DataPath = new();
+    private readonly MicroUnit MicroUnit = new();
     
-    private const bool DEBUG_MODE = false;
+    private const bool DEBUG_MODE = true;
     
     public void PowerOn() => Clock();
-    
+
     private void Clock()
     {
-        DataPath.Init();
-        MicroUnit.Init();
+        DataPath.Init(DEBUG_MODE);
+        MicroUnit.Init(DataPath.Psw);
         
-        while (MicroUnit.State is not State.HALT)
+        while (DataPath.signals.MicroStep is not MicroStep.HALT)
         {
-            DataPath.HostInput();
-            
             Tick();
+            
+            Thread.Sleep(25);
         }
     }
 
     private void Tick()
     {
-        MicroUnit.Debug(DEBUG_MODE);
-
-        DataPath.Clear();
         DataPath.Receive(
         MicroUnit.Emit());
-        
-        DataPath.AddressDrive();
-        DataPath.DataDrive();
-        DataPath.AluAction();
-        DataPath.IoControl();
-        DataPath.DataLatch();
 
-        DataPath.Commit();
+        DataPath.Execute();
         
-        DataPath.Debug(DEBUG_MODE);
+        MicroUnit.Advance(DataPath.GetIr());
         
-        MicroUnit.Advance(DataPath.GetIr(), DataPath.Psw);
+        if(!MicroUnit.BOUNDARY) return;
+        DataPath.Debug(MicroUnit.DEBUG_NAME);
+        MicroUnit.BOUNDARY = false;
     }
 }

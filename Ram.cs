@@ -1,37 +1,46 @@
-using i8080_emulator.Testing;
-
-namespace i8080_emulator;
-using Executing;
+namespace intel8080;
+using Executing.Components;
+using Testing;
 
 public class Ram
 {
     private readonly byte[] Memory = new byte[0x10000];
 
-    public bool DEBUG_MODE;
-    private const bool HEX_DUMP = false;
+    private readonly byte[] Tester =
+    [
+        0x3C,
+        0x00,
+        0x00,
+        0xC3, 0x08, 0x00,
+        0x76,
+        0x76,
+        0xD7, 0x76, 0x00,
+        0x76, 0x76, 0x76, 0x76, 0x76, 
+        0x3C,
+        0xC9,
+    ];
     
     public void Init()
     {
-       HexLoader.Load(File.ReadAllLines("tinybas.hex"), Memory);
-       
-        if (HEX_DUMP) HexDump.Run(Memory);
-    }
-    
-    public void Read(TriStateBus aBusL, TriStateBus aBusH, TriStateBus dBus)
-    {
-        dBus.Set(Memory[Merge(aBusL.Get(), aBusH.Get())]);
-    }
-    
-    public void Write(TriStateBus aBusL, TriStateBus aBusH, TriStateBus dBus)
-    {
-        Memory[Merge(aBusL.Get(), aBusH.Get())] = dBus.Get();
-        if(!DEBUG_MODE) return;
-        Console.WriteLine($"RAM[{Hex(Merge(aBusL.Get(), aBusH.Get()))}]: {Hex(dBus.Get())}");
+        //LoadArray(0x00, Tester);
+        
+        HexLoader.Load(File.ReadAllLines("tinybas.hex"), Memory);
+        
+        if (false) HexDump.Run(Memory);
     }
 
-    private ushort Merge(byte low, byte high)
-        => (ushort)(low + (high << 8));
+    private void LoadByte(ushort address, byte data)
+        => Memory[address] = data;
     
-    private string Hex(ushort input)         
-        => $"0x{Convert.ToString(input, 16).ToUpper()}";
+    private void LoadArray(ushort address, byte[] data)
+    {
+        for (int i = 0; i < data.Length; i++)
+            Memory[address + i] = data[i];
+    }
+
+    public byte Read(ushort address)
+        => Memory[address];
+    
+    public void Write(ushort address, byte data)
+        => Memory[address] = data;
 }

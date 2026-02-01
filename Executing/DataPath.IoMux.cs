@@ -1,43 +1,27 @@
-namespace i8080_emulator.Executing;
+using intel8080.Signaling;
+
+namespace intel8080.Executing;
 
 public partial class DataPath
 {
-    private readonly Tty Tty = new ();
-
-    public void HostInput() => Tty.HostInput();
+    private readonly Tty Tty = new();
     
-    public void IoControl()
+    private void Input()
     {
-        switch (signals.IoAction)
+        switch (Reg(Register.TMP).Get())
         {
-            case IoAction.NONE:
-            {
-                return;
-            }
-            case IoAction.INPUT:
-            {
-                switch (AbusL.Get())
-                {
-                    case 0: Dbus.Set(Tty.ReadStatus()); break;
-                    case 1: Dbus.Set(Tty.ReadData()); break;
-                    default: throw new Exception($"INVALID INPUT PORT \"{AbusL.Get()}\"");
-                }
-                return;
-            }
-            case IoAction.OUTPUT:
-            {
-                switch (AbusL.Get())
-                {
-                    case 1: Tty.WriteData(Dbus.Get()); break;
-                    default: throw new Exception($"INVALID OUTPUT PORT \"{AbusL.Get()}\"");
-                }
-                return;
-            }
+            case 0: Reg(Register.A).Set(Tty.ReadStatus()); break;
+            case 1: Reg(Register.A).Set(Tty.ReadData()); break;
+            default: throw new Exception($"INVALID INPUT PORT \"{Reg(Register.TMP).Get()}\"");
         }
     }
-}
 
-public enum IoAction
-{
-    NONE, INPUT, OUTPUT,
+    private void Output()
+    {
+        switch (Reg(Register.TMP).Get())
+        {
+            case 1: Tty.WriteData(Reg(Register.A).Get()); break;
+            default: throw new Exception($"INVALID OUTPUT PORT \"{Reg(Register.TMP).Get()}\"");
+        }
+    }
 }

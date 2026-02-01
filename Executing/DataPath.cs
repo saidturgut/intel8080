@@ -1,48 +1,59 @@
-namespace i8080_emulator.Executing;
-using Signaling;
-using Components;
+using intel8080.Executing.Components;
+using intel8080.Signaling;
+
+namespace intel8080.Executing;
 
 public partial class DataPath
 {
+    private readonly Reg[] Registers = new Reg[17];
+    
     private readonly Ram Ram = new ();
     
-    private readonly TriStateBus Dbus = new ();
-    private readonly TriStateBus AbusL = new ();
-    private readonly TriStateBus AbusH = new (); 
+    public SignalSet signals;
+    
+    private bool DEBUG_MODE;
 
-    private SignalSet signals = new ();
-
-    public void Init()
+    public void Init(bool debug)
     {
+        DEBUG_MODE = debug;
+        
         Ram.Init();
-        
+        Tty.Init();
+
         for (int i = 0; i < Registers.Length; i++)
-            Registers[i] = new ClockedRegister();
-        
-        Reg(Register.PSW).Set(0x2);
+            Registers[i] = new Reg();
         
         DebugInit();
+        
+        Psw.Update(Reg(Register.PSW).Get());
     }
-    
-    public void Clear()
+
+    public void Receive(SignalSet input)
+        => signals = input;
+
+    public void Execute()
     {
-        Dbus.Clear();
-        AbusL.Clear();
-        AbusH.Clear();
+        Tty.HostInput();
+        switch (signals.MicroStep)
+        {
+            case MicroStep.REG_MOVE: RegisterMove(); break;
+            case MicroStep.RAM_READ: RamRead(); break;
+            case MicroStep.RAM_WRITE: RamWrite(); break;
+            case MicroStep.PAIR_INC: Increment(); break;
+            case MicroStep.PAIR_DEC: Decrement(); break;
+            case MicroStep.ALU_COMPUTE: AluCompute(); break;
+            case MicroStep.IO_READ: Input(); break;
+            case MicroStep.IO_WRITE: Output(); break;
+        }
+        Psw.Update(Reg(Register.PSW).Get());
     }
-
-    public void Receive(SignalSet input) =>
-        signals = input;
-
-    public byte GetIr()
-        => Registers[(byte)Register.IR].Get();
     
-    private ClockedRegister Reg(Register register)
+    private Reg Reg(Register register) 
         => Registers[(byte)register];
+
+    public byte GetIr() 
+        => Reg(Register.IR).Get();
     
-    public void Commit()
-    {
-        foreach (ClockedRegister register in Registers)
-            register.Commit();
-    }
+    private ushort Merge(Register low)
+        => (ushort)(Reg(low).Get() + (Reg(low + 1).Get() << 8));
 }

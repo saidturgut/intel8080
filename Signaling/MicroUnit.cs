@@ -1,57 +1,52 @@
-namespace i8080_emulator.Signaling;
+namespace intel8080.Signaling;
 using Executing.Components;
-using Decoding.Multiplexer;
-using Multiplexer;
-using Decoding;
+using Executing.Computing;
 
-public class MicroUnit : MicroUnitMux
+public class MicroUnit
 {
     private readonly Decoder Decoder = new();
 
-    private SignalSet Signals = new();
+    private SignalSet[] Decoded = [];
+
+    private byte timeState;
     
-    public State State = State.FETCH;
-    
-    private byte currentCycle;
-    
-    public void Init()
+    public bool BOUNDARY;
+
+    public string DEBUG_NAME;
+
+    public void Init(Psw psw)
     {
-        decoded = DecoderMux.FETCH();
+        Decoder.Psw = psw;
+        Decoded = Decoder.FETCH;
     }
-    
+
     public SignalSet Emit()
     {
-        Signals = MicroCycles[(byte)decoded.MicroCycles[currentCycle]]();
-        State = Signals.State;
-        return Signals;
-    }
+        DEBUG_NAME = Decoder.DEBUG_NAME;
 
-    public void Debug(bool DEBUG_MODE)
-    {
-        if(!DEBUG_MODE) return;
-        Console.WriteLine($"CYCLE: \"{decoded.MicroCycles[currentCycle]}\"");
+        return Decoded[timeState];
     }
-
-    public void Advance(byte ir, Psw psw)
+    
+    public void Advance(byte ir)
     {
-        if (Signals.Index) queueIndex++;
-        
-        if (currentCycle != decoded.MicroCycles.Count - 1)
+        //Console.WriteLine($"T STATE: {timeState}");
+
+        if (timeState != Decoded.Length - 1)
         {
-            currentCycle++;
+            timeState++;
         }
         else
         {
-            switch (State)
+            switch (Decoded[timeState].MicroStep)
             {
-                case State.HALT: break;
-                case State.FETCH: throw new Exception("ILLEGAL");
-                case State.DECODE: decoded = Decoder.Decode(ir, psw); break;
-                case State.EXECUTE: decoded = DecoderMux.FETCH(); break;
+                case MicroStep.HALT: break;
+                case MicroStep.DECODE: Decoded = Decoder.Decode(ir); break;
+                default: 
+                    BOUNDARY = true;
+                    Decoded = Decoder.FETCH; break;
             }
             
-            currentCycle = 0;
-            queueIndex = 0;
+            timeState = 0;
         }
     }
 }

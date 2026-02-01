@@ -1,4 +1,4 @@
-namespace i8080_emulator.Executing.Computing;
+namespace intel8080.Executing.Computing;
 using Components;
 
 public struct AluInput
@@ -16,7 +16,7 @@ public struct AluOutput
 }
 
 [Flags]
-public enum PswFlag
+public enum Flag
 {
     None = 0,
     Sign = 1 << 7,
