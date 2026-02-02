@@ -4,17 +4,27 @@ using Signaling;
 public partial class DataPath
 {
     private void DebugInit()
-    {        
+    {
+        /*Reg(Register.SP_L).Set(0x00);
+        Reg(Register.SP_H).Set(0x80);
+        Reg(Register.A).Set(0x55);
+        Reg(Register.B).Set(0x12);
+        Reg(Register.C).Set(0x34);
+        Reg(Register.D).Set(0x56);
+        Reg(Register.E).Set(0x78);
+        Reg(Register.HL_H).Set(0x9A);
+        Reg(Register.HL_L).Set(0xBC);
+        Reg(Register.PSW).Set(0xFF);*/
     }
     
-    public void Debug(string instruction)
+    public void Debug()
     {
         if(!DEBUG_MODE) return;
         
-        Console.WriteLine($"## {instruction} ##");
+        Console.WriteLine($"## {DEBUG_NAME} ##");
         
         ushort flags = DebugAccess(Register.PSW);
-        //Console.WriteLine($"IR: {Hex(DebugAccess(Register.IR))}");
+        Console.WriteLine($"IR: {Hex(DebugAccess(Register.IR))}");
 
         Console.WriteLine($"PC: {Hex(Merge(DebugAccess(Register.PC_L), DebugAccess(Register.PC_H)))}");
         Console.WriteLine($"SP: {Hex(Merge(DebugAccess(Register.SP_L), DebugAccess(Register.SP_H)))}");
@@ -22,10 +32,10 @@ public partial class DataPath
         //Console.WriteLine($"WZ: {Hex(Merge(DebugAccess(Register.WZ_L), DebugAccess(Register.WZ_H)))}");
         
         Console.WriteLine($"A: {Hex(DebugAccess(Register.A))}");
-        /*Console.WriteLine($"B: {Hex(DebugAccess(Register.B))}");
+        Console.WriteLine($"B: {Hex(DebugAccess(Register.B))}");
         Console.WriteLine($"C: {Hex(DebugAccess(Register.C))}");
         Console.WriteLine($"D: {Hex(DebugAccess(Register.D))}");
-        Console.WriteLine($"E: {Hex(DebugAccess(Register.E))}");*/
+        Console.WriteLine($"E: {Hex(DebugAccess(Register.E))}");
         //Console.WriteLine($"TMP: {Hex(DebugAccess(Register.TMP))}");
         
         Console.WriteLine($"S Z A P C");

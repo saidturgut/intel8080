@@ -28,14 +28,20 @@ public partial class DataPath
         
         DebugInit();
         
+        Reg(Register.PC_H).Set(Rom.JUMP);
+        
         Psw.Update(Reg(Register.PSW).Get());
     }
+
+    public void MemoryDump() 
+        => Ram.MemoryDump();
 
     public void Receive(SignalSet input)
         => signals = input;
 
-    public void Execute()
+    public void Execute(string debugName)
     {
+        DEBUG_NAME = debugName;
         switch (signals.MicroStep)
         {
             case MicroStep.REG_MOVE: RegisterMove(); break;
@@ -56,6 +62,11 @@ public partial class DataPath
     public byte GetIr() 
         => Reg(Register.IR).Get();
     
-    private ushort Merge(Register low)
-        => (ushort)(Reg(low).Get() + (Reg(low + 1).Get() << 8));
+    private void PairSet(Register register, ushort value)
+    {
+        Reg(register).Set((byte)(value & 0xFF));
+        Reg(register + 1).Set((byte)(value >> 8));
+    }
+    private ushort PairGet(Register register)
+        => (ushort)(Reg(register).Get() + (Reg(register + 1).Get() << 8));
 }

@@ -31,6 +31,7 @@ public partial class Microcode
             FlagMask = Flag.Carry,
             UseCarry = false,
         }, Register.HL_L),
+        REG_MOVE(Register.TMP, Register.HL_L),
 
         REG_MOVE(decodedPair[1], Register.TMP),
         
@@ -40,5 +41,6 @@ public partial class Microcode
             FlagMask = Flag.Carry,
             UseCarry = true,
         }, Register.HL_H),
+        REG_MOVE(Register.TMP, Register.HL_H),
     ];
 }

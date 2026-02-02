@@ -8,13 +8,13 @@ public partial class DataPath
         => Reg(signals.Operand).Set(Reg(signals.Source).Get());
 
     private void RamRead()
-        => Reg(signals.Operand).Set(Ram.Read(Merge(signals.Source)));
+        => Reg(signals.Operand).Set(Ram.Read(PairGet(signals.Source)));
 
     private void RamWrite()
     {
-        Ram.Write(Merge(signals.Source), Reg(signals.Operand).Get()); 
+        Ram.Write(PairGet(signals.Source), Reg(signals.Operand).Get()); 
         if(!DEBUG_MODE) return;
-        Console.WriteLine($"RAM[{Merge(signals.Source)}]: {Reg(signals.Operand).Get()}");
+        Console.WriteLine($"RAM[{PairGet(signals.Source)}]: {Reg(signals.Operand).Get()}");
     }
     
     private void Increment()

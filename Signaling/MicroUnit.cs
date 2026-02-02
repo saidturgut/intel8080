@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace intel8080.Signaling;
 using Executing.Components;
 using Executing.Computing;
@@ -23,14 +25,12 @@ public class MicroUnit
     public SignalSet Emit()
     {
         DEBUG_NAME = Decoder.DEBUG_NAME;
-
+        
         return Decoded[timeState];
     }
     
     public void Advance(byte ir)
     {
-        //Console.WriteLine($"T STATE: {timeState}");
-
         if (timeState != Decoded.Length - 1)
         {
             timeState++;

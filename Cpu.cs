@@ -8,6 +8,7 @@ public class Cpu
     private readonly MicroUnit MicroUnit = new();
     
     private const bool DEBUG_MODE = true;
+    private const bool STEP_MODE = false;
     
     public void PowerOn() => Clock();
 
@@ -19,8 +20,9 @@ public class Cpu
         while (DataPath.signals.MicroStep is not MicroStep.HALT)
         {
             Tick();
-            
-            Thread.Sleep(25);
+
+            if (DEBUG_MODE && !STEP_MODE)
+                Thread.Sleep(1);
         }
     }
 
@@ -29,12 +31,26 @@ public class Cpu
         DataPath.Receive(
         MicroUnit.Emit());
 
-        DataPath.Execute();
+        DataPath.Execute(MicroUnit.DEBUG_NAME);
         
         MicroUnit.Advance(DataPath.GetIr());
         
         if(!MicroUnit.BOUNDARY) return;
-        DataPath.Debug(MicroUnit.DEBUG_NAME);
+        DataPath.Debug();
         MicroUnit.BOUNDARY = false;
+
+        if (Console.KeyAvailable)
+        {
+            if (Console.ReadKey().Key == ConsoleKey.H)
+            {
+                DataPath.MemoryDump();
+            }
+        }
+        
+        if(!STEP_MODE) return;
+        if (Console.ReadKey().Key != ConsoleKey.Enter)
+        {
+            DataPath.MemoryDump();
+        }
     }
 }

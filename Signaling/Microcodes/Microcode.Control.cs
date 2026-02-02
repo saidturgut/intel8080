@@ -40,7 +40,7 @@ public partial class Microcode
 
     protected SignalSet[] RET(bool permit) =>
     [
-        ..POP(true),
+        ..permit ? POP(true) : IDLE,
     ];
     
     protected SignalSet[] POP(bool pc) =>

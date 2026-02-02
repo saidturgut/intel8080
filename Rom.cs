@@ -2,16 +2,19 @@ namespace intel8080;
 
 public class Rom
 {
-    private const byte JUMP = 0xC0;
-    private const byte BIOS = 0xC1;
-    private const byte CCPB = 0xD0;
-    private const byte BDOS = 0xD0;
+    public const byte JUMP = 0xFA;
+    private const byte BIOS = 0xFB;
+    public const byte DPHB = 0xFC;
+    
+    public const byte CCPB = 0xE4;
+    private const byte BDOS = 0xEC;
+    
     private const byte WARM = 0x08;
-
+    
     private static readonly byte[] BIOS_VECTORS =
     [
         0xC3, WARM, BIOS, 0x00, 0x00,
-        0xC3, 0x00, BDOS, 0x00, 0x00,
+        0xC3, 0x06, BDOS, 0x00, 0x00,
     ];
     
     private static readonly byte[] BIOS_JUMP_TABLE =
@@ -40,7 +43,7 @@ public class Rom
     
     private static readonly byte[] BIOS_ROUTINES =
     [
-        0xD3, 0x01, 0xC3, WARM, BIOS, 0x00, 0x00, 0x00, // 00 BOOT
+        0xD3, 0x00, 0xC3, WARM, BIOS, 0x00, 0x00, 0x00, // 00 BOOT
         0xD3, 0x01, 0xC3, 0x00, CCPB, 0x00, 0x00, 0x00, // 01 WBOOT
         0xDB, 0x02, 0xC9, 0x00, 0x00, 0x00, 0x00, 0x00, // 02 CONST
         0xDB, 0x03, 0xC9, 0x00, 0x00, 0x00, 0x00, 0x00, // 03 CONIN
@@ -58,11 +61,43 @@ public class Rom
         0xDB, 0x0F, 0xC9, 0x00, 0x00, 0x00, 0x00, 0x00, // 15 LISTST
         0xDB, 0x10, 0xC9, 0x00, 0x00, 0x00, 0x00, 0x00, // 16 SECTRAN
     ];
+    
+    private static readonly byte[] DPH_TABLE =
+    [
+        0x00, 0x00,   // XLT = 0
+        0x00, 0x00,
+        0x00, 0x00,
+        0x00, 0x00,
+        0x00, 0xFA,   // DIRBUF
+        0x00, 0xFB,   // DPB
+        0x20, 0xFB,   // CHK
+        0x40, 0xFB    // ALV
+    ];
+    
+    private readonly byte[] Tester =
+    [
+        /*0x3C,
+        0x00,
+        0x00,
+        0xC3, 0x08, 0x00,
+        0x76,
+        0x76,
+        0xD7, 0x76, 0x00,
+        0x76, 0x76, 0x76, 0x76, 0x76, 
+        0x3C,
+        0xC9,*/
+        0xFE
+        ,0x76
+    ];
 
     public void Init(Ram ram)
     {
-        ram.LoadArray(0x0000, BIOS_VECTORS);
-        ram.LoadArray(JUMP << 8, BIOS_JUMP_TABLE);
-        ram.LoadArray(BIOS << 8, BIOS_ROUTINES);
+        //ram.LoadImage(JUMP << 8, Tester);
+        //return;
+        
+        ram.LoadImage(0x0000, BIOS_VECTORS);
+        ram.LoadImage(JUMP << 8, BIOS_JUMP_TABLE);
+        ram.LoadImage(BIOS << 8, BIOS_ROUTINES);
+        ram.LoadImage(DPHB << 8, DPH_TABLE);
     }
 }
