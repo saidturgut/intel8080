@@ -5,9 +5,9 @@ public partial class DataPath
 {
     private void DebugInit()
     {
-        /*Reg(Register.SP_L).Set(0x00);
-        Reg(Register.SP_H).Set(0x80);
-        Reg(Register.A).Set(0x55);
+        Reg(Register.SP_L).Set(0xFE);
+        Reg(Register.SP_H).Set(0xFF);
+        /*Reg(Register.A).Set(0x55);
         Reg(Register.B).Set(0x12);
         Reg(Register.C).Set(0x34);
         Reg(Register.D).Set(0x56);
@@ -17,11 +17,11 @@ public partial class DataPath
         Reg(Register.PSW).Set(0xFF);*/
     }
     
-    public void Debug()
+    public void Debug(string debugName)
     {
         if(!DEBUG_MODE) return;
         
-        Console.WriteLine($"## {DEBUG_NAME} ##");
+        Console.WriteLine($"## {debugName} ##");
         
         ushort flags = DebugAccess(Register.PSW);
         Console.WriteLine($"IR: {Hex(DebugAccess(Register.IR))}");

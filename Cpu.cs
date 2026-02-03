@@ -7,8 +7,7 @@ public class Cpu
     private readonly DataPath DataPath = new();
     private readonly MicroUnit MicroUnit = new();
     
-    private const bool DEBUG_MODE = true;
-    private const bool STEP_MODE = false;
+    private const bool DEBUG_MODE = false;
     
     public void PowerOn() => Clock();
 
@@ -18,39 +17,23 @@ public class Cpu
         MicroUnit.Init(DataPath.Psw);
         
         while (DataPath.signals.MicroStep is not MicroStep.HALT)
-        {
             Tick();
-
-            if (DEBUG_MODE && !STEP_MODE)
-                Thread.Sleep(1);
-        }
     }
 
     private void Tick()
     {
-        DataPath.Receive(
-        MicroUnit.Emit());
+        DataPath.Receive(MicroUnit.Emit());
 
-        DataPath.Execute(MicroUnit.DEBUG_NAME);
+        DataPath.Execute();
         
         MicroUnit.Advance(DataPath.GetIr());
         
-        if(!MicroUnit.BOUNDARY) return;
-        DataPath.Debug();
-        MicroUnit.BOUNDARY = false;
+        if(!MicroUnit.BOUNDARY) Boundary();
+    }
 
-        if (Console.KeyAvailable)
-        {
-            if (Console.ReadKey().Key == ConsoleKey.H)
-            {
-                DataPath.MemoryDump();
-            }
-        }
-        
-        if(!STEP_MODE) return;
-        if (Console.ReadKey().Key != ConsoleKey.Enter)
-        {
-            DataPath.MemoryDump();
-        }
+    private void Boundary()
+    {
+        DataPath.Debug(MicroUnit.DEBUG_NAME);
+        DataPath.Tty.HostInput();
     }
 }

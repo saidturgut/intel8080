@@ -19,29 +19,19 @@ public partial class DataPath
         DEBUG_MODE = debug;
         
         Rom.Init(Ram);
-        Ram.Init();
-        Tty.Init();
-        Disk.Init();
 
-        for (int i = 0; i < Registers.Length; i++)
-            Registers[i] = new Reg();
+        for (int i = 0; i < Registers.Length; i++) Registers[i] = new Reg();
         
         DebugInit();
         
-        Reg(Register.PC_H).Set(Rom.JUMP);
-        
         Psw.Update(Reg(Register.PSW).Get());
     }
-
-    public void MemoryDump() 
-        => Ram.MemoryDump();
-
+    
     public void Receive(SignalSet input)
         => signals = input;
 
-    public void Execute(string debugName)
+    public void Execute()
     {
-        DEBUG_NAME = debugName;
         switch (signals.MicroStep)
         {
             case MicroStep.REG_MOVE: RegisterMove(); break;
@@ -62,11 +52,6 @@ public partial class DataPath
     public byte GetIr() 
         => Reg(Register.IR).Get();
     
-    private void PairSet(Register register, ushort value)
-    {
-        Reg(register).Set((byte)(value & 0xFF));
-        Reg(register + 1).Set((byte)(value >> 8));
-    }
     private ushort PairGet(Register register)
         => (ushort)(Reg(register).Get() + (Reg(register + 1).Get() << 8));
 }

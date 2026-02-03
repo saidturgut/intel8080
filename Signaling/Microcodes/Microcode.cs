@@ -13,7 +13,7 @@ public partial class Microcode : MicrocodeRom
     
     protected Register decodedOperand;
     protected Register decodedSource;
-    protected Register[] decodedPair;
+    private Register[] decodedPair;
     protected Condition decodedCondition;
 
     protected void UpdateOpcode(byte ir)

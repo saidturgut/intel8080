@@ -1,20 +1,15 @@
-using System.Diagnostics;
-
 namespace intel8080.Signaling;
 using Executing.Components;
-using Executing.Computing;
 
 public class MicroUnit
 {
     private readonly Decoder Decoder = new();
-
     private SignalSet[] Decoded = [];
-
     private byte timeState;
     
     public bool BOUNDARY;
 
-    public string DEBUG_NAME;
+    public string DEBUG_NAME = "NONE";
 
     public void Init(Psw psw)
     {
@@ -24,6 +19,7 @@ public class MicroUnit
 
     public SignalSet Emit()
     {
+        BOUNDARY = false;
         DEBUG_NAME = Decoder.DEBUG_NAME;
         
         return Decoded[timeState];

@@ -4,55 +4,60 @@ public class Disk
 {
     private readonly byte[] diskImage = File.ReadAllBytes("cpm22-1.dsk");
     
-    private byte currentTrack;
-    private byte currentSector;
-    private ushort dmaAddress;
+    private byte currentDrive = 0;
+    private byte currentTrack = 0;
+    private byte currentSector = 1;
+    private ushort dmaAddress = 0x80;
+    private byte status = 0;
     
-    public void Init() { }
-
     public void Reset()
     {
+        currentDrive = 0;
         currentTrack = 0;
         currentSector = 1;
-        dmaAddress = 0x80;
+        dmaAddress = 0;
+        status = 0;
     }
-    
+
+    public void SetDrive(byte drive)
+        => currentDrive = drive;
     public void SetTrack(byte track)
         => currentTrack = track;
-
     public void SetSector(byte sector)
         => currentSector = sector;
-
-    public void SetDma(ushort dma)
-        => dmaAddress = dma;
+    public void SetDmaLow(byte low)
+        => dmaAddress = (ushort)((dmaAddress & 0xFF00) | low);
+    public void SetDmaHigh(byte high)
+        => dmaAddress = (ushort)((dmaAddress & 0x00FF) | (high << 8));
+    public byte GetStatus() 
+        => status;
     
-    public byte Read(Ram ram)
+    public void ExecuteCommand(Ram ram, byte command)
     {
         int offset = Offset();
 
-        if (offset < 0 || offset + 128 > diskImage.Length)
-            throw new Exception("READ ONLY!!");
+        status = 0;
         
-        for (byte i = 0; i < 128; i++)
+        switch (command)
         {
-            ram.Write((ushort)(dmaAddress + i), diskImage[offset + i]);
+            case 0:
+            {
+                for (byte i = 0; i < 128; i++)
+                    ram.Write((ushort)(dmaAddress + i), diskImage[offset + i]);
+                break;
+            }
+            case 1:
+            {
+                for (byte i = 0; i < 128; i++)
+                    diskImage[offset + i] = ram.Read((ushort)(dmaAddress + i));
+                break;
+            }
+            default:
+                status = 0x1;
+                break;
         }
-
-        return 0x00;
     }
-
-    public byte Write(Ram ram)
-    {
-        int offset = Offset();
-        
-        for (byte i = 0; i < 128; i++)
-        {
-            diskImage[offset + i] = ram.Read((ushort)(dmaAddress + i));
-        }
-        
-        return 0x00;
-    }
-
+    
     private int Offset()
         => (currentTrack * 26 + (currentSector - 1)) * 128;
 }
